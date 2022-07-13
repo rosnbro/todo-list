@@ -1,43 +1,36 @@
-function render(projects, tasks) {
-    const content = document.getElementById('content');
-
-    content.innerHTML = '';
-
-    content.appendChild(renderSidebar(projects));
-    content.appendChild(renderHeader(projects));
-    content.appendChild(renderMain(projects, tasks));
-    return content;
+function render() {
+    renderSidebar();
+    renderMain();
 }
 
-function renderSidebar(projects) {
-    const sidebar = document.createElement('div');
+function renderSidebar() {
+    const sidebar = document.getElementById('sidebar');
     const title = document.createElement('h1');
     const projectContainer = document.createElement('div');
+    const projectTitle = document.createElement('h3');
 
-    sidebar.classList.add('sidebar');
+    projectTitle.classList.add('projectTitle');
+    projectContainer.id = 'projectContainer';
 
-    title.textContent = 'Task Title';
+    title.textContent = 'TITLE';
+    projectTitle.textContent = 'Projects:';
 
-    projects.forEach(project => {
-        let projectSelect = document.createElement('div');
-        projectSelect.textContent = project.name;
-        projectContainer.appendChild(projectSelect);
-    });
-
+    projectContainer.appendChild(projectTitle);
     sidebar.appendChild(title);
     sidebar.appendChild(projectContainer);
     return sidebar;
 }
 
-function renderHeader() {
-    const header = document.createElement('header');
+function renderMain() {
+    const main = document.getElementById('main');
+    const newTask = document.createElement('div');
+    const taskContainer = document.createElement('div');
 
-    return header;
-}
+    newTask.classList.add('newTask');
+    taskContainer.id = 'taskContainer';
 
-function renderMain(projects, tasks) {
-    const main = document.createElement('main');
-
+    main.appendChild(newTask);
+    main.appendChild(taskContainer);
     return main;
 }
 

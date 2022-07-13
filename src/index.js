@@ -1,22 +1,45 @@
 import render from './render';
+import renderActive from './renderActive';
 import './style.css';
 
 let projects = [];
 let tasks = [];
 
-//test items
-let test1 = {
-    name: 'test1',
+let allProjects = {
+    name: 'All',
 };
-let test2 = {
-    name: 'test2',
-};
-let test3 = {
-    name: 'test3',
-};
+projects.push(allProjects);
 
-projects.push(test1);
-projects.push(test2);
-projects.push(test3);
+//test projects
+let proj1 = {
+    name: 'proj1',
+};
+let proj2 = {
+    name: 'proj2',
+};
+let proj3 = {
+    name: 'proj3',
+};
+projects.push(proj1);
+projects.push(proj2);
+projects.push(proj3);
 
-render(projects, tasks);
+//test tasks
+let task1 = {
+    name: 'task1',
+    project: 'proj1',
+};
+let task2 = {
+    name: 'task2',
+    project: 'proj2',
+};
+let task3 = {
+    name: 'task3',
+    project: 'proj3',
+};
+tasks.push(task1);
+tasks.push(task2);
+tasks.push(task3);
+
+render();
+renderActive(projects, tasks);

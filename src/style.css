@@ -1,39 +1,55 @@
 :root {
-
+    --std-spacing: 16px;
+    --std-spacing-half: 8px;
+    --bg-color-sidebar: aquamarine;
+    --bg-color-main: darkkhaki;
+    --bg-color-task: white;
 }
 
 body {
     margin: 0;
     height: 100vh;
     width: 100vw;
-}
-
-#content {
-    height: 100%;
-    width: 100%;
     display: grid;
-    grid-template-columns: 400px 1fr;
-    grid-template-rows: 200px 1fr;
+    grid-template-columns: 300px 1fr;
     grid-template-areas:
-    "sidebar header" 
     "sidebar main";
 }
 
-.sidebar {
+#sidebar {
     grid-area: sidebar;
     height: 100%;
     width: 100%;
-    background-color: aquamarine;
+    background-color: var(--bg-color-sidebar);
 }
 
 h1 {
+    margin: var(--std-spacing) 0 0 var(--std-spacing);
+}
+
+#projectContainer {
+    margin: var(--std-spacing);
+    padding: var(--std-spacing);
+    background-color: white;
+}
+
+h3 {
     margin: 0;
 }
 
-header {
-    grid-area: header;
-    width: 100%;
+.projectSelect {
+    margin: var(--std-spacing) 0;
+    padding: var(--std-spacing-half);
+    font-size: 1.5rem;
     background-color: cornflowerblue;
+    cursor: pointer;
+}
+
+.newTask {
+    background-color: var(--bg-color-task);
+    margin: var(--std-spacing) 0 0 var(--std-spacing);
+    height: 100px;
+    width: calc(95% - var(--std-spacing));
 }
 
 main {
@@ -41,5 +57,5 @@ main {
     height: auto;
     width: 100%;
     overflow: scroll;
-    background-color: darkkhaki;
+    background-color: var(--bg-color-main);
 }
