@@ -1,5 +1,6 @@
 import render from './render';
-import renderActive from './renderActive';
+import renderNav from './renderNav';
+import renderTasks from './renderTasks';
 import './style.css';
 
 let projects = [];
@@ -21,7 +22,7 @@ let proj3 = {
     name: 'proj3',
 };
 projects.push(proj1);
-projects.push(proj2);
+//projects.push(proj2);
 projects.push(proj3);
 
 //test tasks
@@ -37,9 +38,15 @@ let task3 = {
     name: 'task3',
     project: 'proj3',
 };
+let task4 = {
+    name: 'task4',
+    project: 'All',
+}
 tasks.push(task1);
 tasks.push(task2);
 tasks.push(task3);
+tasks.push(task4);
 
 render();
-renderActive(projects, tasks);
+renderNav(projects);
+renderTasks(projects, tasks, "All");

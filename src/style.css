@@ -27,7 +27,7 @@ h1 {
     margin: var(--std-spacing) 0 0 var(--std-spacing);
 }
 
-#projectContainer {
+#projectNavContainer {
     margin: var(--std-spacing);
     padding: var(--std-spacing);
     background-color: white;
@@ -37,7 +37,7 @@ h3 {
     margin: 0;
 }
 
-.projectSelect {
+.projectNav {
     margin: var(--std-spacing) 0;
     padding: var(--std-spacing-half);
     font-size: 1.5rem;

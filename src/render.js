@@ -6,31 +6,31 @@ function render() {
 function renderSidebar() {
     const sidebar = document.getElementById('sidebar');
     const title = document.createElement('h1');
-    const projectContainer = document.createElement('div');
+    const projectNavContainer = document.createElement('div');
     const projectTitle = document.createElement('h3');
 
     projectTitle.classList.add('projectTitle');
-    projectContainer.id = 'projectContainer';
+    projectNavContainer.id = 'projectNavContainer';
 
     title.textContent = 'TITLE';
     projectTitle.textContent = 'Projects:';
 
-    projectContainer.appendChild(projectTitle);
+    projectNavContainer.appendChild(projectTitle);
     sidebar.appendChild(title);
-    sidebar.appendChild(projectContainer);
+    sidebar.appendChild(projectNavContainer);
     return sidebar;
 }
 
 function renderMain() {
     const main = document.getElementById('main');
     const newTask = document.createElement('div');
-    const taskContainer = document.createElement('div');
+    const ProjectContainer = document.createElement('div');
 
     newTask.classList.add('newTask');
-    taskContainer.id = 'taskContainer';
+    ProjectContainer.id = 'ProjectContainer';
 
     main.appendChild(newTask);
-    main.appendChild(taskContainer);
+    main.appendChild(ProjectContainer);
     return main;
 }
 
