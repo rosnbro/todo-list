@@ -1,6 +1,11 @@
 function renderProjects(projects, tasks, selection) {
-    const projectContainer = document.getElementById('ProjectContainer');
-    projectContainer.textContent = selection;
+    const projectContainer = document.getElementById('taskContainer');
+    const containerTitle = document.createElement('div');
+
+    containerTitle.id = 'containerTitle';
+    containerTitle.textContent = selection;
+
+    projectContainer.appendChild(containerTitle);
     renderTasks(projectContainer, filterTasks(projects, tasks));
     return projectContainer;
 }
@@ -8,7 +13,9 @@ function renderProjects(projects, tasks, selection) {
 function filterTasks(projects, tasks) {
     return tasks.filter(task => {
         return projects.find(project => {
-            return project.name === task.project;
+            if (project.selected == true) {
+                return project.name === task.project;
+            }
         });
     });
 }

@@ -8,21 +8,25 @@ let tasks = [];
 
 let allProjects = {
     name: 'All',
+    selected: true,
 };
 projects.push(allProjects);
 
 //test projects
 let proj1 = {
     name: 'proj1',
+    selected: true,
 };
 let proj2 = {
     name: 'proj2',
+    selected: true,
 };
 let proj3 = {
     name: 'proj3',
+    selected: false,
 };
 projects.push(proj1);
-//projects.push(proj2);
+projects.push(proj2);
 projects.push(proj3);
 
 //test tasks

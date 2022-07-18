@@ -5,32 +5,40 @@ function render() {
 
 function renderSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const title = document.createElement('h1');
-    const projectNavContainer = document.createElement('div');
-    const projectTitle = document.createElement('h3');
-
-    projectTitle.classList.add('projectTitle');
-    projectNavContainer.id = 'projectNavContainer';
+    const title = document.createElement('div');
+    const projectContainer = document.createElement('div');
+    const projectTitle = document.createElement('div');
+    const projectMenu = document.createElement('div');
+    const newProject = document.createElement('div');
+    
+    title.id = 'title';
+    projectContainer.id = 'projectContainer';
+    projectTitle.id = 'projectTitle';
+    projectMenu.id = 'projectMenu';
+    newProject.id = 'newProject';
 
     title.textContent = 'TITLE';
     projectTitle.textContent = 'Projects:';
+    newProject.textContent = '+ new project';
 
-    projectNavContainer.appendChild(projectTitle);
+    projectContainer.appendChild(projectTitle);
+    projectContainer.appendChild(projectMenu);
+    projectContainer.appendChild(newProject);
     sidebar.appendChild(title);
-    sidebar.appendChild(projectNavContainer);
+    sidebar.appendChild(projectContainer);
     return sidebar;
 }
 
 function renderMain() {
     const main = document.getElementById('main');
     const newTask = document.createElement('div');
-    const ProjectContainer = document.createElement('div');
+    const taskContainer = document.createElement('div');
 
-    newTask.classList.add('newTask');
-    ProjectContainer.id = 'ProjectContainer';
+    newTask.id = 'newTask';
+    taskContainer.id = 'taskContainer';
 
     main.appendChild(newTask);
-    main.appendChild(ProjectContainer);
+    main.appendChild(taskContainer);
     return main;
 }
 

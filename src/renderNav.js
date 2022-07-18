@@ -1,14 +1,14 @@
 function renderNav(projects) {
-    const projectNavContainer = document.getElementById('projectNavContainer');
+    const projectMenu = document.getElementById('projectMenu');
 
     projects.forEach(project => {
-        let projectNav = document.createElement('div');
-        projectNav.classList.add('projectNav');
-        projectNav.textContent = project.name;
-        projectNavContainer.appendChild(projectNav);
+        let projectSelector = document.createElement('div');
+        projectSelector.classList.add('projectSelector');
+        projectSelector.textContent = project.name;
+        projectMenu.appendChild(projectSelector);
     });
 
-    return projectNavContainer;
+    return projectMenu;
 }
 
 export default renderNav;

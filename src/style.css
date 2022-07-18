@@ -2,6 +2,8 @@
     --std-spacing: 16px;
     --std-spacing-half: 8px;
     --bg-color-sidebar: aquamarine;
+    --bg-color-menu: white;
+    --bg-color-project: cornflowerblue;
     --bg-color-main: darkkhaki;
     --bg-color-task: white;
 }
@@ -23,33 +25,37 @@ body {
     background-color: var(--bg-color-sidebar);
 }
 
-h1 {
+#title {
+    height: 100px;
     margin: var(--std-spacing) 0 0 var(--std-spacing);
+    font-size: 3rem;
 }
 
-#projectNavContainer {
+#projectContainer {
     margin: var(--std-spacing);
     padding: var(--std-spacing);
-    background-color: white;
+    background-color: var(--bg-color-menu);
 }
 
-h3 {
+#projectTitle {
     margin: 0;
+    font-size: 2rem;
 }
 
-.projectNav {
+.projectSelector,
+#newProject {
     margin: var(--std-spacing) 0;
     padding: var(--std-spacing-half);
     font-size: 1.5rem;
-    background-color: cornflowerblue;
+    background-color: var(--bg-color-project);
     cursor: pointer;
 }
 
-.newTask {
+#newTask {
     background-color: var(--bg-color-task);
     margin: var(--std-spacing) 0 0 var(--std-spacing);
     height: 100px;
-    width: calc(95% - var(--std-spacing));
+    width: calc(95% - 2 * var(--std-spacing));
 }
 
 main {
@@ -58,4 +64,25 @@ main {
     width: 100%;
     overflow: scroll;
     background-color: var(--bg-color-main);
+}
+
+#taskContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    padding: var(--std-spacing);
+}
+
+#containerTitle {
+    font-size: 2rem;
+    margin-top: var(--std-spacing);
+}
+
+.task {
+    background-color: var(--bg-color-task);
+    margin: var(--std-spacing) 0;
+    min-height: 100px;
+    width: 95%;
+    font-size: 1.5rem;
 }
