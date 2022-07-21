@@ -5,6 +5,7 @@ function renderProjects(projects, tasks, selection) {
     containerTitle.id = 'containerTitle';
     containerTitle.textContent = selection;
 
+    projectContainer.innerHTML = '';
     projectContainer.appendChild(containerTitle);
     renderTasks(projectContainer, filterTasks(projects, tasks));
     return projectContainer;

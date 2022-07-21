@@ -1,11 +1,14 @@
 :root {
     --std-spacing: 16px;
+    --std-spacing-double: 32px;
     --std-spacing-half: 8px;
+    --font-family: 'Times New Roman', Times, serif;
     --bg-color-sidebar: aquamarine;
     --bg-color-menu: white;
     --bg-color-project: cornflowerblue;
     --bg-color-main: darkkhaki;
     --bg-color-task: white;
+    --font-color-project: black;
 }
 
 body {
@@ -16,18 +19,22 @@ body {
     grid-template-columns: 300px 1fr;
     grid-template-areas:
     "sidebar main";
+    font-family: var(--font-family);
 }
 
 #sidebar {
     grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     background-color: var(--bg-color-sidebar);
 }
 
 #title {
-    height: 100px;
-    margin: var(--std-spacing) 0 0 var(--std-spacing);
+    padding: 25px 0;
+    height: 50px;
+    margin: var(--std-spacing) 0 0 var(--std-spacing-double);
     font-size: 3rem;
 }
 
@@ -44,6 +51,7 @@ body {
 
 .projectSelector,
 #newProject {
+    height: 30px;
     margin: var(--std-spacing) 0;
     padding: var(--std-spacing-half);
     font-size: 1.5rem;
@@ -56,6 +64,21 @@ body {
     margin: var(--std-spacing) 0 0 var(--std-spacing);
     height: 100px;
     width: calc(95% - 2 * var(--std-spacing));
+}
+
+#projectInput {
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: 1.5rem;
+    font-family: var(--font-family);
+    background-color: var(--bg-color-project);
+}
+
+#projectInput::placeholder {
+    font-size: 1.5rem;
+    font-family: var(--font-family);
+    color: var(--font-color-project);
 }
 
 main {
@@ -81,7 +104,7 @@ main {
 
 .task {
     background-color: var(--bg-color-task);
-    margin: var(--std-spacing) 0;
+    margin: var(--std-spacing) 0 var(--std-spacing-half) 0;
     min-height: 100px;
     width: 95%;
     font-size: 1.5rem;
