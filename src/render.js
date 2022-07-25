@@ -17,8 +17,8 @@ function renderSidebar() {
     projectMenu.id = 'projectMenu';
     newProject.id = 'newProject';
 
-    title.textContent = 'tsk';
-    projectTitle.textContent = 'Projects:';
+    title.textContent = 'task board';
+    projectTitle.textContent = 'projects:';
 
     projectContainer.appendChild(projectTitle);
     projectContainer.appendChild(projectMenu);

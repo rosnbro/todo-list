@@ -25,7 +25,14 @@ function renderTasks(wrapper, tasks) {
     tasks.forEach(task => {
         let taskItem = document.createElement('div');
         taskItem.classList.add('task');
-        taskItem.textContent = task.name;
+        for (const prop in task) {
+            if (Object.hasOwnProperty.call(task, prop)) {
+                const property = document.createElement('div');
+                property.textContent = task[prop];
+                taskItem.appendChild(property)
+                
+            }
+        }
         wrapper.appendChild(taskItem);
     });
     return wrapper;

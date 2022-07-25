@@ -10,7 +10,7 @@ function renderNav(projects, tasks) {
 
         projectSelector.textContent = project.name;
         projectSelector.addEventListener('click', () => {
-            if (project.name == 'All') {
+            if (project.name == 'all') {
                 projects.forEach(proj => {
                     proj.selected = true;
                 });
