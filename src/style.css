@@ -84,7 +84,7 @@ main {
 }
 
 #newTask {
-    background-color: var(--bg-color-task);
+    background-color: var(--bg-color-form);
     margin: var(--std-spacing) 0 0 var(--std-spacing);
     min-height: calc(100px - 2 * var(--std-spacing));
     width: calc(95% - 2 * var(--std-spacing));
@@ -94,17 +94,47 @@ main {
     height: 30px;
     padding: 35px var(--std-spacing);
     font-size: 1.5rem;
+    background-color: var(--bg-color-task);
+}
+
+label {
+    font-size: 1rem;
 }
 
 #newTaskForm {
-    display: flex;
+    display: grid;
+    grid-template-areas: 
+    "textInput boxInputOne boxInputTwo"
+    "textInput addButton addButton";
+    grid-template-columns: 50% 1fr 1fr;
+    column-gap: var(--std-spacing-double);
     padding: var(--std-spacing);
     background-color: var(--bg-color-form);
 }
 
-.inputField {
+#textInput {
+    grid-area: textInput;
     display: flex;
     flex-direction: column;
+}
+
+#boxInputOne {
+    grid-area: boxInputOne;
+    display: flex;
+    flex-direction: column;
+}
+
+#boxInputTwo {
+    grid-area: boxInputTwo;
+    display: flex;
+    flex-direction: column;
+}
+
+#addNewTask {
+    grid-area: addButton;
+    font-size: 1rem;
+    margin: var(--std-spacing);
+    padding: var(--std-spacing-half);
 }
 
 #taskContainer {
@@ -118,6 +148,7 @@ main {
 #containerTitle {
     font-size: 2rem;
     margin-top: var(--std-spacing);
+    margin-left: var(--std-spacing);
 }
 
 .task {

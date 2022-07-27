@@ -1,6 +1,7 @@
 function taskForm(parent, projects) {
-    const inputLeft = document.createElement('div');
-    const inputRight = document.createElement('div');
+    const inputLeft = document.createElement('fieldset');
+    const inputRightOne = document.createElement('fieldset');
+    const inputRightTwo = document.createElement('fieldset')
 
     const addToProjectLabel = document.createElement('label');
     const addToProject = document.createElement('select');
@@ -78,34 +79,28 @@ function taskForm(parent, projects) {
         addToProject.value = 'all';
     }
 
-    inputLeft.classList.add('inputField');
-    inputRight.classList.add('inputField');
+    inputLeft.id = 'textInput';
+    inputRightOne.id = 'boxInputOne';
+    inputRightTwo.id = 'boxInputTwo';
 
     inputLeft.appendChild(titleLabel);
     inputLeft.appendChild(titleInput);
     inputLeft.appendChild(descriptionLabel);
     inputLeft.appendChild(descriptionInput);
     
-    inputRight.appendChild(addToProjectLabel);
-    inputRight.appendChild(addToProject);
-    inputRight.appendChild(progressLabel);
-    inputRight.appendChild(progressInput);
-    inputRight.appendChild(priorityLabel);
-    inputRight.appendChild(priorityInput);
-    inputRight.appendChild(dueDateLabel)
-    inputRight.appendChild(dueDateInput);
+    inputRightOne.appendChild(addToProjectLabel);
+    inputRightOne.appendChild(addToProject);
+    inputRightOne.appendChild(priorityLabel);
+    inputRightOne.appendChild(priorityInput);
+    
+    inputRightTwo.appendChild(dueDateLabel)
+    inputRightTwo.appendChild(dueDateInput);
+    inputRightTwo.appendChild(progressLabel);
+    inputRightTwo.appendChild(progressInput);
     
     parent.appendChild(inputLeft);
-    parent.appendChild(inputRight);
-
-    let taskData = {
-        progress: progressInput.value,
-        priority: priorityInput.value,
-        name: titleInput.value,
-        project: addToProject.value,
-        description: descriptionInput.value,
-        dueDate: dueDateInput.value,
-    }
+    parent.appendChild(inputRightOne);
+    parent.appendChild(inputRightTwo);
 
     return parent;
 }

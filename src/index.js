@@ -86,6 +86,7 @@ function taskAdder() {
     const newTaskForm = document.getElementById('newTaskForm');
     const addNewTask = document.createElement('button');
     
+    addNewTask.id = 'addNewTask';
     addNewTask.textContent = 'add';
     addNewTask.addEventListener('click', add);
     
@@ -101,11 +102,21 @@ function taskAdder() {
         
         let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate);
         tasks.push(tsk);
-        
+
+        projects.forEach(p => {
+            if (formData.project == 'all') {
+                p.selected = true;
+            } else if (p.name != formData.project) {
+                p.selected = false;
+            } else {
+                p.selected = true;
+            }
+        });
+
         newTaskForm.innerHTML = '';
         newTask.removeChild(newTask.lastChild);
         renderNav(projects, tasks);
-        renderTasks(projects, tasks, 'all');
+        renderTasks(projects, tasks, formData.project);
     }
     
     newTaskForm.id = 'newTaskForm';
@@ -132,20 +143,36 @@ function defaults() {
     projects.push(proj3);
 
     let task1 = {
+        progress: 0,
+        priority: 'low',
         title: 'task1',
         project: 'proj1',
+        description: 'test description',
+        dueDate: '2022-07-30',
     };
     let task2 = {
+        progress: 20,
+        priority: 'low',
         title: 'task2',
         project: 'proj2',
+        description: 'test description',
+        dueDate: '2022-07-30',
     };
     let task3 = {
+        progress: 60,
+        priority: 'low',
         title: 'task3',
         project: 'proj3',
+        description: 'test description',
+        dueDate: '2022-07-30',
     };
     let task4 = {
+        progress: 100,
+        priority: 'low',
         title: 'task4',
         project: 'all',
+        description: 'test description',
+        dueDate: '2022-07-30',
     }
     tasks.push(task1);
     tasks.push(task2);
