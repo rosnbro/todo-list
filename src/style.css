@@ -8,6 +8,8 @@
     --bg-color-project: cornflowerblue;
     --bg-color-main: darkkhaki;
     --bg-color-task: white;
+    --bg-color-progress: darkred;
+    --color-priority: lightgreen;
     --bg-color-form: grey;
     --font-color-project: black;
 }
@@ -60,6 +62,10 @@ body {
     cursor: pointer;
 }
 
+.selected {
+    box-shadow: 0 0 5px black;
+}
+
 #projectInput {
     height: 100%;
     width: 100%;
@@ -98,34 +104,35 @@ main {
 }
 
 label {
+    margin: var(--std-spacing-half) 0;
     font-size: 1rem;
 }
 
 #newTaskForm {
     display: grid;
     grid-template-areas: 
-    "textInput boxInputOne boxInputTwo"
-    "textInput addButton addButton";
-    grid-template-columns: 50% 1fr 1fr;
+    "leftInput centerInput rightInput"
+    "leftInput centerInput addButton";
+    grid-template-columns: 1fr 50% 1fr;
     column-gap: var(--std-spacing-double);
     padding: var(--std-spacing);
     background-color: var(--bg-color-form);
 }
 
-#textInput {
-    grid-area: textInput;
+#leftInput {
+    grid-area: leftInput;
     display: flex;
     flex-direction: column;
 }
 
-#boxInputOne {
-    grid-area: boxInputOne;
+#centerInput {
+    grid-area: centerInput;
     display: flex;
     flex-direction: column;
 }
 
-#boxInputTwo {
-    grid-area: boxInputTwo;
+#rightInput {
+    grid-area: rightInput;
     display: flex;
     flex-direction: column;
 }
@@ -145,17 +152,60 @@ label {
     padding: var(--std-spacing);
 }
 
-#containerTitle {
-    font-size: 2rem;
-    margin-top: var(--std-spacing);
+.task {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin-bottom: var(--std-spacing);
+    min-height: 100px;
+    width: 95%;
+    font-size: 1.5rem;
+    background-color: var(--bg-color-task);
+}
+
+.progressContainer {
+    position: relative;
+    width: 100px;
+    min-height: 100px;
+    border-right: solid var(--std-spacing-half) var(--color-priority);
+}
+
+.progress {
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    width: 100px;
+    background-color: var(--bg-color-progress);
+}
+
+.priority {
+    min-height: 100px;
+    width: var(--std-spacing);
     margin-left: var(--std-spacing);
 }
 
-.task {
-    background-color: var(--bg-color-task);
-    margin-top: var(--std-spacing);
-    padding: var(--std-spacing);
-    min-height: 100px;
-    width: calc(95% - 2 * var(--std-spacing));
-    font-size: 1.5rem;
+.lowPriority {
+    border-left: solid var(--std-spacing-half) var(--bg-color-task);
+    border-right: solid var(--std-spacing-half) var(--bg-color-task);
+}
+
+.medPriority {
+    border-left: solid var(--std-spacing-half) var(--color-priority);
+    border-right: solid var(--std-spacing-half) var(--bg-color-task);
+}
+
+.highPriority {
+    border-left: solid var(--std-spacing-half) var(--color-priority);
+    border-right: solid var(--std-spacing-half) var(--color-priority);
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    margin: var(--std-spacing);
+}
+
+.rightContainer {
+    position: absolute;
+    right: 0;
 }

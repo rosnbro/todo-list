@@ -17,6 +17,7 @@ class project {
     constructor(name, selected) {
         this.name = name;
         this.selected = selected;
+        //Add color scheme for project. associated tasks the same color on 'all' page?
     }
 }
 
@@ -30,6 +31,13 @@ class task {
         this.project = project;
         this.description = description;
         this.dueDate = dueDate;
+        this.edit = function() {
+            
+        };
+        this.delete = function() {
+            tasks.splice(tasks.indexOf(this), 1);
+            renderTasks(projects, tasks);
+        };
     }
 }
 
@@ -42,17 +50,20 @@ function newProjects() {
     projectInput.id = 'projectInput';
     projectInput.addEventListener('keydown', (e) => {
         if (e.code === 'Enter') {
+            //Check for duplicate project names
             let proj = new project(projectInput.value, true);
+            projectInput.value = '';
+
             projects.push(proj);
             projects.forEach(p => {
                 if (p.name != proj.name) {
                     p.selected = false;
                 }
             });
+
             newTasks();
-            renderNav(projects, tasks);
-            renderTasks(projects, tasks, proj.name);
-            projectInput.value = '';
+            renderNav(projects, tasks, proj.name);
+            renderTasks(projects, tasks);
         }
     });
 
@@ -99,6 +110,8 @@ function taskAdder() {
                 formData[item.name] = item.value;
             });
         });
+
+        //Add form validation checking new task against all current tasks to check for duplicates
         
         let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate);
         tasks.push(tsk);
@@ -115,8 +128,8 @@ function taskAdder() {
 
         newTaskForm.innerHTML = '';
         newTask.removeChild(newTask.lastChild);
-        renderNav(projects, tasks);
-        renderTasks(projects, tasks, formData.project);
+        renderNav(projects, tasks, formData.project);
+        renderTasks(projects, tasks);
     }
     
     newTaskForm.id = 'newTaskForm';
@@ -126,58 +139,23 @@ function taskAdder() {
 }
 
 function defaults() {
-    let proj1 = {
-        name: 'proj1',
-        selected: true,
-    };
-    let proj2 = {
-        name: 'proj2',
-        selected: true,
-    };
-    let proj3 = {
-        name: 'proj3',
-        selected: true,
-    };
+    let proj1 = new project('proj1', true);
+    let proj2 = new project('proj2', true);
+    let proj3 = new project('proj3', true);
+
     projects.push(proj1);
     projects.push(proj2);
     projects.push(proj3);
 
-    let task1 = {
-        progress: 0,
-        priority: 'low',
-        title: 'task1',
-        project: 'proj1',
-        description: 'test description',
-        dueDate: '2022-07-30',
-    };
-    let task2 = {
-        progress: 20,
-        priority: 'low',
-        title: 'task2',
-        project: 'proj2',
-        description: 'test description',
-        dueDate: '2022-07-30',
-    };
-    let task3 = {
-        progress: 60,
-        priority: 'low',
-        title: 'task3',
-        project: 'proj3',
-        description: 'test description',
-        dueDate: '2022-07-30',
-    };
-    let task4 = {
-        progress: 100,
-        priority: 'low',
-        title: 'task4',
-        project: 'all',
-        description: 'test description',
-        dueDate: '2022-07-30',
-    }
-    tasks.push(task1);
-    tasks.push(task2);
-    tasks.push(task3);
-    tasks.push(task4);
+    let tsk1 = new task(0, 'low', 'task1', 'proj1', 'test description', '2022-07-30');
+    let tsk2 = new task(20, 'low', 'task2', 'proj2', 'test description', '2022-07-30');
+    let tsk3 = new task(60, 'med', 'task3', 'proj3', 'test description', '2022-07-30');
+    let tsk4 = new task(100, 'high', 'task4', 'all', 'test description', '2022-07-30');
+
+    tasks.push(tsk1);
+    tasks.push(tsk2);
+    tasks.push(tsk3);
+    tasks.push(tsk4);
 }
 
 defaults();
@@ -186,5 +164,5 @@ document.addEventListener('DOMContentLoaded', () => {
     newProjects();
     newTasks();
 });
-renderNav(projects, tasks);
-renderTasks(projects, tasks, 'all');
+renderNav(projects, tasks, 'all');
+renderTasks(projects, tasks);
