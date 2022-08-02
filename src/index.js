@@ -7,12 +7,6 @@ import './style.css';
 let projects = [];
 let tasks = [];
 
-let allProjects = {
-    name: 'all',
-    selected: true,
-};
-projects.push(allProjects);
-
 class project {
     constructor(name, selected) {
         this.name = name;
@@ -20,6 +14,9 @@ class project {
         //Add color scheme for project. associated tasks the same color on 'all' page?
     }
 }
+
+let all = new project('all', true);
+projects.push(all);
 
 // ADD DELETE BUTTON TO PROJECTS THAT ALSO DELETE ASSOCIATED TASKS
 
@@ -32,7 +29,9 @@ class task {
         this.description = description;
         this.dueDate = dueDate;
         this.edit = function() {
-            
+            let parent = document.querySelector(`.${this.title}Form`);
+            taskForm(parent, projects, this);  // check for duplicate task titles or this will mess up
+            editTasks(this.title);
         };
         this.delete = function() {
             tasks.splice(tasks.indexOf(this), 1);
@@ -85,7 +84,7 @@ function newTasks() {
             newTask.removeChild(newTask.lastChild);
         } else {
             newTask.appendChild(taskForm(newTaskForm, projects));
-            taskAdder();
+            addTasks();
         }
     });
     
@@ -93,26 +92,50 @@ function newTasks() {
     newTask.appendChild(newTaskTitle);
 }
 
-function taskAdder() {
+function addTasks() {
     const newTaskForm = document.getElementById('newTaskForm');
-    const addNewTask = document.createElement('button');
+    const addTaskButton = document.createElement('button');
     
-    addNewTask.id = 'addNewTask';
-    addNewTask.textContent = 'add';
-    addNewTask.addEventListener('click', add);
+    addTaskButton.id = 'addTaskButton';
+    addTaskButton.textContent = 'add';
+    addTaskButton.addEventListener('click', () => {
+        formData(newTaskForm);
+        newTask.removeChild(newTask.lastChild);
+    });
     
-    function add() {
-        let formData = new Object();
-        let formDividers = newTaskForm.childNodes;
-        formDividers.forEach((divider) => {
-            let formItems = divider.childNodes;
-            formItems.forEach((item) => {
-                formData[item.name] = item.value;
-            });
-        });
+    newTaskForm.id = 'newTaskForm';
+    newTaskForm.appendChild(addTaskButton);
 
-        //Add form validation checking new task against all current tasks to check for duplicates
-        
+    return newTaskForm;
+}
+
+function editTasks(taskTitle) {
+    const editTaskForm =  document.querySelector(`.${taskTitle}Form`);
+    const editTaskButton = document.createElement('button');
+
+    editTaskButton.classList.add('editTaskButton');
+    editTaskButton.textContent = 'confirm';
+    editTaskButton.addEventListener('click', () => {
+        formData(editTaskForm, taskTitle);
+        editTaskForm.innerHTML = '';
+    })
+
+    editTaskForm.appendChild(editTaskButton);
+}
+
+function formData(form, taskTitle) {
+    let formData = new Object();
+    let formDividers = form.childNodes;
+    let selection = 'all';
+    
+    formDividers.forEach((divider) => {
+        let formItems = divider.childNodes;
+        formItems.forEach((item) => {
+            formData[item.name] = item.value;
+        });
+    });
+    //Add form validation checking new task against all current tasks to check for duplicates
+    if (form.id == 'newTaskForm') {
         let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate);
         tasks.push(tsk);
 
@@ -125,17 +148,31 @@ function taskAdder() {
                 p.selected = true;
             }
         });
+        selection = formData.project;
+    } else {
+        tasks.forEach(t => {
+            if (t.title == taskTitle) {
+                let editedTask = Object.assign(t, formData);
+                t = editedTask;
+            }
+        });
 
-        newTaskForm.innerHTML = '';
-        newTask.removeChild(newTask.lastChild);
-        renderNav(projects, tasks, formData.project);
-        renderTasks(projects, tasks);
+        let allProj = {};
+        projects.forEach(p => {
+            if (p.name == 'all') {
+                allProj = Object.assign(allProj, p);
+            }
+            if (allProj.selected != true) {
+                if (p.selected == true) {
+                    selection = p.name;
+                }
+            }
+        });
     }
     
-    newTaskForm.id = 'newTaskForm';
-    newTaskForm.appendChild(addNewTask);
-
-    return newTaskForm;
+    form.innerHTML = '';
+    renderNav(projects, tasks, selection);
+    renderTasks(projects, tasks);
 }
 
 function defaults() {

@@ -108,14 +108,15 @@ label {
     font-size: 1rem;
 }
 
-#newTaskForm {
+#newTaskForm, 
+.editTaskForm {
     display: grid;
     grid-template-areas: 
     "leftInput centerInput rightInput"
     "leftInput centerInput addButton";
     grid-template-columns: 1fr 50% 1fr;
     column-gap: var(--std-spacing-double);
-    padding: var(--std-spacing);
+    
     background-color: var(--bg-color-form);
 }
 
@@ -137,7 +138,7 @@ label {
     flex-direction: column;
 }
 
-#addNewTask {
+#addTaskButton {
     grid-area: addButton;
     font-size: 1rem;
     margin: var(--std-spacing);
@@ -148,19 +149,20 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
     padding: var(--std-spacing);
 }
 
 .task {
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
     margin-bottom: var(--std-spacing);
-    min-height: 100px;
     width: 95%;
-    font-size: 1.5rem;
     background-color: var(--bg-color-task);
+}
+
+.taskContent {
+    display: flex;
+    position: relative;
+    min-height: 100px;
+    font-size: 1.5rem;
 }
 
 .progressContainer {

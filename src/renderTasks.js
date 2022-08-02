@@ -17,15 +17,20 @@ function filterTasks(projects, tasks) {
 
 function renderTasks(wrapper, tasks) {
     tasks.forEach(task => {
-        let taskItem = document.createElement('div');
+        let taskBox = document.createElement('div');
+        let taskContent = document.createElement('div');
         let textContainer = document.createElement('div');
         let rightContainer = document.createElement('div');
         let editButton = document.createElement('button');
         let deleteButton = document.createElement('button');
+        let editTaskForm = document.createElement('div');
 
         textContainer.classList.add('textContainer');
         rightContainer.classList.add('rightContainer');
-        taskItem.classList.add('task');
+        taskBox.classList.add('task');
+        taskContent.classList.add('taskContent');
+        editTaskForm.classList.add('editTaskForm');
+        editTaskForm.classList.add(`${task.title}Form`);
         
         for (const prop in task) {
             if (Object.hasOwnProperty.call(task, prop)) {
@@ -39,7 +44,7 @@ function renderTasks(wrapper, tasks) {
                         progress.style.height = `${task[prop]}%`;
 
                         progressContainer.appendChild(progress);
-                        taskItem.appendChild(progressContainer);
+                        taskContent.appendChild(progressContainer);
                         break;
 
                     case 'priority':
@@ -56,7 +61,7 @@ function renderTasks(wrapper, tasks) {
                                 priority.classList.add('lowPriority');
                                 break;
                         }
-                        taskItem.appendChild(priority);
+                        taskContent.appendChild(priority);
                         break;
 
                     case 'title':
@@ -89,15 +94,23 @@ function renderTasks(wrapper, tasks) {
 
         deleteButton.textContent = 'delete'; //add trash can symbol
         deleteButton.addEventListener('click', () => task.delete());
-        rightContainer.appendChild(deleteButton);
-
+        
         editButton.textContent = 'edit'; //add paper and pencil symbol
-        rightContainer.appendChild(editButton);
+        editButton.addEventListener('click', () => {
+            if (editTaskForm.hasChildNodes()) {
+                editTaskForm.innerHTML = '';
+            } else task.edit();
+        });
 
-        taskItem.appendChild(textContainer);
-        taskItem.appendChild(rightContainer);
-        wrapper.appendChild(taskItem);
+        rightContainer.appendChild(deleteButton);
+        rightContainer.appendChild(editButton);
+        taskContent.appendChild(textContainer);
+        taskContent.appendChild(rightContainer);
+        taskBox.appendChild(taskContent);
+        taskBox.appendChild(editTaskForm);
+        wrapper.appendChild(taskBox);
     });
+    
     return wrapper;
 }
 

@@ -27,7 +27,7 @@ function renderNav(projects, tasks, selection) {
             navs.forEach(nav => nav.classList.remove('selected'));
             projectSelector.classList.add('selected');
 
-            renderTasks(projects, tasks, project.name);
+            renderTasks(projects, tasks);
         });
 
         projectMenu.appendChild(projectSelector);
