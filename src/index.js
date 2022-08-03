@@ -28,6 +28,10 @@ class task {
         this.project = project;
         this.description = description;
         this.dueDate = dueDate;
+        this.complete = function() {
+            (this.progress != 100) ? this.progress = 100 : this.progress = 0;
+            renderTasks(projects, tasks);
+        };
         this.edit = function() {
             let parent = document.querySelector(`.${this.title}Form`);
             taskForm(parent, projects, this);  // check for duplicate task titles or this will mess up
