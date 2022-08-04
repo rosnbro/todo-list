@@ -6,36 +6,40 @@ import './style.css';
 
 let projects = [];
 let tasks = [];
+let projectPalette = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+let i = 0;
 
 class project {
-    constructor(name, selected) {
+    constructor(name, selected, color) {
         this.name = name;
         this.selected = selected;
+        this.color = color;
         //Add color scheme for project. associated tasks the same color on 'all' page?
     }
 }
 
-let all = new project('all', true);
+let all = new project('all', true, projectPalette[projects.length]);
 projects.push(all);
 
 // ADD DELETE BUTTON TO PROJECTS THAT ALSO DELETE ASSOCIATED TASKS
 
 class task {
-    constructor(progress, priority, title, project, description, dueDate) {
+    constructor(progress, priority, title, project, description, dueDate, index) {
         this.progress = progress;
         this.priority = priority;
         this.title = title;
         this.project = project;
         this.description = description;
         this.dueDate = dueDate;
+        this.index = index
         this.complete = function() {
             (this.progress != 100) ? this.progress = 100 : this.progress = 0;
             renderTasks(projects, tasks);
         };
         this.edit = function() {
-            let parent = document.querySelector(`.${this.title}Form`);
+            let parent = document.querySelector(`.task${this.index}Form`);
             taskForm(parent, projects, this);  // check for duplicate task titles or this will mess up
-            editTasks(this.title);
+            editTasks(this.index);
         };
         this.delete = function() {
             tasks.splice(tasks.indexOf(this), 1);
@@ -54,7 +58,7 @@ function newProjects() {
     projectInput.addEventListener('keydown', (e) => {
         if (e.code === 'Enter') {
             //Check for duplicate project names
-            let proj = new project(projectInput.value, true);
+            let proj = new project(projectInput.value, true, projectPalette[projects.length]);
             projectInput.value = '';
 
             projects.push(proj);
@@ -113,21 +117,21 @@ function addTasks() {
     return newTaskForm;
 }
 
-function editTasks(taskTitle) {
-    const editTaskForm =  document.querySelector(`.${taskTitle}Form`);
+function editTasks(taskIndex) {
+    const editTaskForm =  document.querySelector(`.task${taskIndex}Form`);
     const editTaskButton = document.createElement('button');
 
     editTaskButton.classList.add('editTaskButton');
     editTaskButton.textContent = 'confirm';
     editTaskButton.addEventListener('click', () => {
-        formData(editTaskForm, taskTitle);
+        formData(editTaskForm, taskIndex);
         editTaskForm.innerHTML = '';
     })
 
     editTaskForm.appendChild(editTaskButton);
 }
 
-function formData(form, taskTitle) {
+function formData(form, taskIndex) {
     let formData = new Object();
     let formDividers = form.childNodes;
     let selection = 'all';
@@ -140,7 +144,7 @@ function formData(form, taskTitle) {
     });
     //Add form validation checking new task against all current tasks to check for duplicates
     if (form.id == 'newTaskForm') {
-        let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate);
+        let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate, i++);
         tasks.push(tsk);
 
         projects.forEach(p => {
@@ -155,7 +159,7 @@ function formData(form, taskTitle) {
         selection = formData.project;
     } else {
         tasks.forEach(t => {
-            if (t.title == taskTitle) {
+            if (t.index == taskIndex) {
                 let editedTask = Object.assign(t, formData);
                 t = editedTask;
             }
@@ -180,18 +184,17 @@ function formData(form, taskTitle) {
 }
 
 function defaults() {
-    let proj1 = new project('proj1', true);
-    let proj2 = new project('proj2', true);
-    let proj3 = new project('proj3', true);
-
+    let proj1 = new project('project 1', true, projectPalette[projects.length]);
     projects.push(proj1);
+    let proj2 = new project('project 2', true, projectPalette[projects.length]);
     projects.push(proj2);
+    let proj3 = new project('project 3', true, projectPalette[projects.length]);
     projects.push(proj3);
-
-    let tsk1 = new task(0, 'low', 'task1', 'proj1', 'test description', '2022-07-30');
-    let tsk2 = new task(20, 'low', 'task2', 'proj2', 'test description', '2022-07-30');
-    let tsk3 = new task(60, 'med', 'task3', 'proj3', 'test description', '2022-07-30');
-    let tsk4 = new task(100, 'high', 'task4', 'all', 'test description', '2022-07-30');
+    let description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+    let tsk1 = new task(0, 'low', 'task1', 'project 1', description, '2022-07-30', i++);
+    let tsk2 = new task(20, 'low', 'task2', 'project 2', 'test description', '2022-07-30', i++);
+    let tsk3 = new task(60, 'med', 'task3', 'project 3', description, '2022-07-30', i++);
+    let tsk4 = new task(100, 'high', 'task4', 'all', 'test description', '2022-07-30', i++);
 
     tasks.push(tsk1);
     tasks.push(tsk2);

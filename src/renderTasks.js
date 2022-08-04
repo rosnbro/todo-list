@@ -1,7 +1,11 @@
+import Delete from './delete.svg';
+import Edit from './edit.svg';
+import Check from './check.svg';
+
 function renderPage(projects, tasks) {
     const pageContainer = document.getElementById('taskContainer');
     pageContainer.innerHTML = '';
-    renderTasks(pageContainer, filterTasks(projects, tasks));
+    renderTasks(pageContainer, filterTasks(projects, tasks), projects);
     return pageContainer;
 }
 
@@ -15,40 +19,61 @@ function filterTasks(projects, tasks) {
     });
 }
 
-function renderTasks(wrapper, tasks) {
+function renderTasks(wrapper, tasks, projects) {
     tasks.forEach(task => {
         let taskBox = document.createElement('div');
         let taskContent = document.createElement('div');
         let progressContainer = document.createElement('div');
+        let progress = document.createElement('div');
         let progressButton = document.createElement('button');
         let priority = document.createElement('div');
         let textContainer = document.createElement('div');
+        let title = document.createElement('div');
+        let project = document.createElement('div');
+        let description = document.createElement('div');
         let rightContainer = document.createElement('div');
+        let dueDate = document.createElement('div');
         let editButton = document.createElement('button');
         let deleteButton = document.createElement('button');
         let editTaskForm = document.createElement('div');
+        let projectColor;
+
+        let deleteIcon = new Image();
+        let editIcon = new Image();
+        let checkIcon = new Image();
+        deleteIcon.src = Delete;
+        editIcon.src = Edit;
+        checkIcon.src = Check;
 
         taskBox.classList.add('task');
         taskContent.classList.add('taskContent');
         progressContainer.classList.add('progressContainer');
+        progress.classList.add('progress');
+        progressButton.classList.add('progressButton');
         priority.classList.add('priority');
         textContainer.classList.add('textContainer');
+        title.classList.add('taskTitle');
+        project.classList.add('taskProject');
+        description.classList.add('taskDescription');
         rightContainer.classList.add('rightContainer');
+        dueDate.classList.add('dueDate');
+        deleteButton.classList.add('deleteButton');
+        editButton.classList.add('editButton');
         editTaskForm.classList.add('editTaskForm');
-        editTaskForm.classList.add(`${task.title}Form`);
+        editTaskForm.classList.add(`task${task.index}Form`);
         
         for (const prop in task) {
             if (Object.hasOwnProperty.call(task, prop)) {
                 switch (prop) {
                     case 'progress':
-                        let progress = document.createElement('div');
-                        progress.classList.add('progress');
-                        progress.style.height = `${task[prop]}%`;
-                        (task[prop] == 100) ? progressButton.textContent = 'x' : progressButton.textContent = '';
-                        //replace x with check mark
-                        progressContainer.appendChild(progress);
+                        progress.style.width = `${task[prop]}%`;
+                        if (task[prop] == 100) { 
+                            progressButton.appendChild(checkIcon);
+                        } else {
+                            progressButton.innerHTML = '';
+                            progressButton.textContent = `${task[prop]}%`;
+                        }
                         break;
-
                     case 'priority':
                         switch (task[prop]) {
                             case 'med':
@@ -62,54 +87,51 @@ function renderTasks(wrapper, tasks) {
                                 break;
                         }
                         break;
-
                     case 'title':
-                        let title = document.createElement('div');
-                        title.classList.add('taskTitle');
                         title.textContent = task[prop];
-                        textContainer.appendChild(title);
                         break;
-
                     case 'project':
-                        let project = document.createElement('div');
-                        project.classList.add('taskProject');
                         project.textContent = task[prop];
-                        textContainer.appendChild(project);
+                        projects.forEach((project) => {
+                            if (task[prop] == project.name) projectColor = project.color;
+                        })
                         break;
-
                     case 'description':
-                        let description = document.createElement('div');
-                        description.classList.add('taskDescription');
                         description.textContent = task[prop];
-                        textContainer.appendChild(description);
                         break;
-
                     case 'dueDate':
-                        let dueDate = document.createElement('div');
                         dueDate.textContent = task[prop];
-                        dueDate.id = 'dueDate';
-                        rightContainer.appendChild(dueDate);
                         break;
                 }
             }
         }
 
-        progressButton.classList.add('progressButton');
+        progress.style.backgroundColor = projectColor;
+
+        progressButton.style.borderColor = projectColor;
         progressButton.addEventListener('click', () => task.complete());
 
-        deleteButton.textContent = 'delete'; //add trash can symbol
-        deleteButton.classList.add('deleteButton');
+        textContainer.addEventListener('click', () => {
+            taskContent.classList.toggle('expanded');
+            description.classList.toggle('fullDescription');
+        });
+
+        deleteButton.appendChild(deleteIcon);
         deleteButton.addEventListener('click', () => task.delete());
         
-        editButton.textContent = 'edit'; //add paper and pencil symbol
-        editButton.classList.add('editButton');
+        editButton.appendChild(editIcon); //add paper and pencil symbol
         editButton.addEventListener('click', () => {
             if (editTaskForm.hasChildNodes()) {
                 editTaskForm.innerHTML = '';
             } else task.edit();
         });
 
+        progressContainer.appendChild(progress);
         progressContainer.appendChild(progressButton);
+        textContainer.appendChild(title);
+        textContainer.appendChild(project);
+        textContainer.appendChild(description);
+        rightContainer.appendChild(dueDate);
         rightContainer.appendChild(deleteButton);
         rightContainer.appendChild(editButton);
         taskContent.appendChild(progressContainer);

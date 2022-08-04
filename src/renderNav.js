@@ -6,8 +6,9 @@ function renderNav(projects, tasks, selection) {
 
     projects.forEach(project => {
         let projectSelector = document.createElement('div');
+        
         projectSelector.classList.add('projectSelector');
-
+        projectSelector.style.backgroundColor = project.color;
         projectSelector.textContent = project.name;
         if (project.name == selection) projectSelector.classList.add('selected');
 

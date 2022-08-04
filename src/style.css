@@ -9,8 +9,9 @@
     --bg-color-main: darkkhaki;
     --bg-color-task: white;
     --bg-color-progress: darkred;
-    --color-priority: lightgreen;
     --bg-color-form: grey;
+    --color-priority: black;
+    --border-color: black;
     --font-color-project: black;
 }
 
@@ -35,7 +36,7 @@ body {
 }
 
 #title {
-    padding: 25px 0;
+    padding: 30px 0;
     height: 50px;
     margin: var(--std-spacing) 0 0 var(--std-spacing-double);
     font-size: 3rem;
@@ -63,7 +64,9 @@ body {
 }
 
 .selected {
-    box-shadow: 0 0 5px black;
+    /*box-shadow: 0 0 5px black;*/
+    border: solid 2px var(--border-color);
+    border-width: 2px 4px 4px 2px;
 }
 
 #projectInput {
@@ -96,13 +99,16 @@ main {
     z-index: 1;
     background-color: var(--bg-color-form);
     margin: var(--std-spacing) 0 0 var(--std-spacing);
-    min-height: calc(100px - 2 * var(--std-spacing));
+    min-height: calc(110px - 2 * var(--std-spacing));
     width: calc(95% - 2 * var(--std-spacing));
+    border: solid 2px var(--border-color);
+    border-bottom-width: 4px;
+    border-right-width: 4px;
 }
 
 #newTaskTitle {
     height: 30px;
-    padding: 35px var(--std-spacing);
+    padding: 40px var(--std-spacing);
     font-size: 1.5rem;
     background-color: var(--bg-color-task);
 }
@@ -121,6 +127,11 @@ label {
     grid-template-columns: 1fr 50% 1fr;
     column-gap: var(--std-spacing-double);
     background-color: var(--bg-color-form);
+    border-top: solid 2px var(--border-color);
+}
+
+fieldset {
+    border: none;
 }
 
 #leftInput {
@@ -158,43 +169,60 @@ label {
 .task {
     margin-bottom: var(--std-spacing);
     width: 95%;
+    border: solid 2px var(--border-color);
+    border-right-width: 4px;
     background-color: var(--bg-color-task);
 }
 
 .taskContent {
     display: flex;
     position: relative;
-    height: 100px;
-    font-size: 1.5rem;
+    height: 110px;
+}
+
+.expanded {
+    min-height: 110px;
+    height: auto;
 }
 
 .progressContainer {
-    position: relative;
+    position: absolute;
+    left: 0;
+    display: flex;
     width: 100px;
-    height: 100px;
+    height: 100%;
     border-right: solid var(--std-spacing-half) var(--color-priority);
 }
 
 .progress {
     position: absolute;
+    display: flex;
     bottom: 0;
     margin: 0;
-    width: 100px;
+    height: 100%;
     background-color: var(--bg-color-progress);
 }
 
 .progressButton {
     position: absolute;
     left: 30px;
-    top: 30px;
+    top: 35px;
     border-radius: 100%;
+    border-width: 4px;
     height: 40px;
     width: 40px;
-    background-color: var(--bg-color-form);
+    font-size: 0.7rem;
+    background-color: var(--bg-color-task);
+}
+
+.progressButton img {
+    height: 25px;
 }
 
 .priority {
-    min-height: 100px;
+    position: absolute;
+    left: calc(100px + var(--std-spacing-half));
+    height: 100%;
     width: var(--std-spacing);
     margin-left: var(--std-spacing);
 }
@@ -217,7 +245,9 @@ label {
 .textContainer {
     display: flex;
     flex-direction: column;
-    margin: var(--std-spacing);
+    margin-left: calc(100px + 3.5 * var(--std-spacing));
+    padding: var(--std-spacing);
+    width: calc(100% - 250px - 5.5 * var(--std-spacing));
 }
 
 .taskTitle {
@@ -226,33 +256,57 @@ label {
 }
 
 .taskProject {
+    margin-top: calc(0.5 * var(--std-spacing-half));
     font-size: 1.2rem;
 }
 
 .taskDescription {
+    margin-top: calc(0.5 * var(--std-spacing-half));
     font-size: 1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.fullDescription {
+    white-space: normal;
+    text-overflow: scroll;
 }
 
 .rightContainer {
     position: absolute;
     right: 0;
     height: 100%;
+    width: 150px;
     display: grid;
     column-gap: var(--std-spacing);
     grid-template-areas: 
     "dueDate delete"
     "dueDate edit";
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 1fr 50px;
 }
 
-#dueDate {
+.dueDate {
     grid-area: dueDate;
     align-self: center;
+    font-size: 1.2rem;
 }
 
 .deleteButton {
     grid-area: delete;
+    padding: none;
+    background-color: var(--bg-color-task);
 }
 
 .editButton {
     grid-area: edit;
+    padding: none;
+    background-color: var(--bg-color-task);
+}
+
+.deleteButton img,
+.editButton img {
+    height: 25px;
+    padding: none;
 }
