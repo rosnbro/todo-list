@@ -83,7 +83,16 @@ function taskForm(parent, projects, taskData) {
             if (taskData.project == project.name) {
                 option.selected = true;
             } 
-        } else if (project.name == 'all') option.selected = true;
+        } else {
+            let projectNavs = document.querySelectorAll('.projectSelector');
+            projectNavs.forEach(nav => {
+                if (nav.classList.contains('selected')) {
+                    if (nav.textContent == project.name) {
+                        option.selected = true;
+                    }
+                }
+            })
+        }
         addToProject.appendChild(option);
     });
 

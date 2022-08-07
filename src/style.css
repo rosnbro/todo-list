@@ -12,6 +12,7 @@
     --bg-color-form: grey;
     --color-priority: black;
     --border-color: black;
+    --delete-hover-color: red;
     --font-color-project: black;
 }
 
@@ -36,7 +37,7 @@ body {
 }
 
 #title {
-    padding: 30px 0;
+    padding: 33px 0;
     height: 50px;
     margin: var(--std-spacing) 0 0 var(--std-spacing-double);
     font-size: 3rem;
@@ -55,23 +56,35 @@ body {
 
 .projectSelector,
 #newProject {
-    height: 30px;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 100%;
+    height: auto;
     margin: var(--std-spacing) 0;
-    padding: var(--std-spacing-half);
     font-size: 1.5rem;
     background-color: var(--bg-color-project);
     cursor: pointer;
 }
 
+.projectName {
+    padding: var(--std-spacing-half);
+}
+
+.projectDeleteButton {
+    background-color: white;
+}
+
+.projectDeleteButton img {
+    height: 20px;
+}
+
 .selected {
-    /*box-shadow: 0 0 5px black;*/
     border: solid 2px var(--border-color);
     border-width: 2px 4px 4px 2px;
 }
 
 #projectInput {
-    height: 100%;
-    width: 100%;
+    margin: var(--std-spacing-half);
     border: none;
     font-size: 1.5rem;
     font-family: var(--font-family);
@@ -84,31 +97,60 @@ body {
     color: var(--font-color-project);
 }
 
+#projectInputButton {
+    height: 100%;
+    font-size: 1rem;
+    border-color: var(--bg-color-project);
+    background-color: white;
+}
+
 main {
     grid-area: main;
+    display: grid;
+    grid-template-areas: 
+    'sort newTask'
+    'container container';
+    grid-template-columns: calc(110px + var(--std-spacing) + 2px) 1fr;
+    grid-template-rows: calc(110px + var(--std-spacing) + 6px) 1fr;
+    column-gap: 0;
+    row-gap: var(--std-spacing);
     height: auto;
     width: 100%;
     overflow: scroll;
     background-color: var(--bg-color-main);
 }
 
+#sort {
+    grid-area: sort;
+    margin-left: var(--std-spacing);
+    margin-top: var(--std-spacing);
+    min-height: 110px;
+    background-color: var(--bg-color-task);
+    border: solid 2px var(--border-color);
+    border-bottom-width: 4px;
+    border-right-width: 0;
+}
+
 #newTask {
+    grid-area: newTask;
     position: sticky;
     position: -webkit-sticky;
     top: var(--std-spacing);
     z-index: 1;
+    font-weight: bold;
     background-color: var(--bg-color-form);
-    margin: var(--std-spacing) 0 0 var(--std-spacing);
-    min-height: calc(110px - 2 * var(--std-spacing));
-    width: calc(95% - 2 * var(--std-spacing));
+    margin-top: var(--std-spacing);
+    min-height: calc(110px - 6px - 2 * var(--std-spacing));
+    margin-right: var(--std-spacing-double);
     border: solid 2px var(--border-color);
     border-bottom-width: 4px;
     border-right-width: 4px;
+    border-left-width: var(--std-spacing-half);
 }
 
 #newTaskTitle {
     height: 30px;
-    padding: 40px var(--std-spacing);
+    padding: 40px var(--std-spacing) 40px calc(3 * var(--std-spacing));
     font-size: 1.5rem;
     background-color: var(--bg-color-task);
 }
@@ -126,8 +168,18 @@ label {
     "leftInput centerInput addButton";
     grid-template-columns: 1fr 50% 1fr;
     column-gap: var(--std-spacing-double);
+    height: fit-content;
+    width: 100%;
     background-color: var(--bg-color-form);
     border-top: solid 2px var(--border-color);
+}
+
+#newTaskForm {
+    margin-left: -8px;
+    border: solid 2px var(--border-color);
+    border-bottom-width: 4px;
+    border-right-width: 4px;
+    border-left-width: var(--std-spacing-half);
 }
 
 fieldset {
@@ -160,15 +212,16 @@ fieldset {
 }
 
 #taskContainer {
+    grid-area: container;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: var(--std-spacing);
+    margin-left: var(--std-spacing);
+    margin-right: calc(6px + var(--std-spacing-double));
 }
 
 .task {
     margin-bottom: var(--std-spacing);
-    width: 95%;
+    width: 100%;
     border: solid 2px var(--border-color);
     border-right-width: 4px;
     background-color: var(--bg-color-task);
@@ -189,7 +242,7 @@ fieldset {
     position: absolute;
     left: 0;
     display: flex;
-    width: 100px;
+    width: 110px;
     height: 100%;
     border-right: solid var(--std-spacing-half) var(--color-priority);
 }
@@ -205,13 +258,14 @@ fieldset {
 
 .progressButton {
     position: absolute;
-    left: 30px;
+    left: 35px;
     top: 35px;
     border-radius: 100%;
     border-width: 4px;
     height: 40px;
     width: 40px;
     font-size: 0.7rem;
+    font-weight: bold;
     background-color: var(--bg-color-task);
 }
 
@@ -221,7 +275,7 @@ fieldset {
 
 .priority {
     position: absolute;
-    left: calc(100px + var(--std-spacing-half));
+    left: calc(110px + var(--std-spacing-half));
     height: 100%;
     width: var(--std-spacing);
     margin-left: var(--std-spacing);
@@ -245,9 +299,10 @@ fieldset {
 .textContainer {
     display: flex;
     flex-direction: column;
-    margin-left: calc(100px + 3.5 * var(--std-spacing));
+    margin-left: calc(110px + 3.5 * var(--std-spacing));
     padding: var(--std-spacing);
-    width: calc(100% - 250px - 5.5 * var(--std-spacing));
+    width: calc(100% - 260px - 5.5 * var(--std-spacing));
+    cursor: pointer;
 }
 
 .taskTitle {
@@ -284,7 +339,7 @@ fieldset {
     "dueDate delete"
     "dueDate edit";
     grid-template-rows: 50% 50%;
-    grid-template-columns: 1fr 50px;
+    grid-template-columns: 1fr 55px;
 }
 
 .dueDate {
@@ -299,10 +354,18 @@ fieldset {
     background-color: var(--bg-color-task);
 }
 
+.deleteButton:hover {
+    background-color: var(--delete-hover-color);
+}
+
 .editButton {
     grid-area: edit;
     padding: none;
     background-color: var(--bg-color-task);
+}
+
+.editButton:hover {
+    background-color: var(--bg-color-form);
 }
 
 .deleteButton img,

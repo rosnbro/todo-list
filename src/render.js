@@ -30,12 +30,15 @@ function renderSidebar() {
 
 function renderMain() {
     const main = document.getElementById('main');
+    const sort = document.createElement('div');
     const newTask = document.createElement('div');
     const taskContainer = document.createElement('div');
 
+    sort.id = 'sort';
     newTask.id = 'newTask';
     taskContainer.id = 'taskContainer';
 
+    main.appendChild(sort);
     main.appendChild(newTask);
     main.appendChild(taskContainer);
     return main;

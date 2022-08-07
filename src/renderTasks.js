@@ -71,7 +71,7 @@ function renderTasks(wrapper, tasks, projects) {
                             progressButton.appendChild(checkIcon);
                         } else {
                             progressButton.innerHTML = '';
-                            progressButton.textContent = `${task[prop]}%`;
+                            progressButton.textContent = `${task[prop]}`;
                         }
                         break;
                     case 'priority':
@@ -119,7 +119,7 @@ function renderTasks(wrapper, tasks, projects) {
         deleteButton.appendChild(deleteIcon);
         deleteButton.addEventListener('click', () => task.delete());
         
-        editButton.appendChild(editIcon); //add paper and pencil symbol
+        editButton.appendChild(editIcon);
         editButton.addEventListener('click', () => {
             if (editTaskForm.hasChildNodes()) {
                 editTaskForm.innerHTML = '';

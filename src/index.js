@@ -3,6 +3,7 @@ import renderNav from './renderNav';
 import renderTasks from './renderTasks';
 import taskForm from './taskForm';
 import './style.css';
+//if using local storage try using object.assign to add object methods
 
 let projects = [];
 let tasks = [];
@@ -14,14 +15,29 @@ class project {
         this.name = name;
         this.selected = selected;
         this.color = color;
-        //Add color scheme for project. associated tasks the same color on 'all' page?
+        this.delete = function() {
+            if (this.name == 'all') {
+                tasks.length = 0;
+                projects.length = 0;
+                projects.push(all);
+                renderNav(projects, tasks, 'all');
+                renderTasks(projects, tasks);
+            } else {
+                projects.splice(projects.indexOf(this), 1);
+                tasks.forEach((t) => {
+                    if (t.project == this.name) {
+                        tasks.splice(tasks.indexOf(t), 1);
+                    }
+                })
+                renderNav(projects, tasks, 'all');
+                renderTasks(projects, tasks);
+            }
+        }
     }
 }
 
 let all = new project('all', true, projectPalette[projects.length]);
 projects.push(all);
-
-// ADD DELETE BUTTON TO PROJECTS THAT ALSO DELETE ASSOCIATED TASKS
 
 class task {
     constructor(progress, priority, title, project, description, dueDate, index) {
@@ -38,7 +54,7 @@ class task {
         };
         this.edit = function() {
             let parent = document.querySelector(`.task${this.index}Form`);
-            taskForm(parent, projects, this);  // check for duplicate task titles or this will mess up
+            taskForm(parent, projects, this);
             editTasks(this.index);
         };
         this.delete = function() {
@@ -51,30 +67,49 @@ class task {
 function newProjects() {
     const newProject = document.getElementById('newProject');
     const projectInput = document.createElement('input');
+    const projectInputButton = document.createElement('button');
 
     projectInput.type = 'text';
     projectInput.placeholder = '+ new project';
     projectInput.id = 'projectInput';
     projectInput.addEventListener('keydown', (e) => {
         if (e.code === 'Enter') {
-            //Check for duplicate project names
-            let proj = new project(projectInput.value, true, projectPalette[projects.length]);
-            projectInput.value = '';
-
-            projects.push(proj);
-            projects.forEach(p => {
-                if (p.name != proj.name) {
-                    p.selected = false;
-                }
-            });
-
-            newTasks();
-            renderNav(projects, tasks, proj.name);
-            renderTasks(projects, tasks);
+            addProjects(projectInput);
         }
     });
 
+    projectInputButton.textContent = '>';
+    projectInputButton.id = 'projectInputButton';
+    projectInputButton.addEventListener('click', () => addProjects(projectInput));
+
     newProject.appendChild(projectInput);
+    newProject.appendChild(projectInputButton);
+}
+
+function addProjects(projectInput) {
+    let valid = true;
+    projects.forEach(project => {
+        if (projectInput.value == project.name) {
+            alert('this project already exists');
+            projectInput.value = '';
+            valid = false;
+        }
+    });
+    if (projectInput.value.match(/^\s*$/)) valid = false;
+    if (valid == true) {
+        let proj = new project(projectInput.value, true, projectPalette[projects.length]);
+        projectInput.value = '';
+        projects.push(proj);
+        projects.forEach(p => {
+            if (p.name != proj.name) {
+                p.selected = false;
+            }
+        });
+        
+        newTasks();
+        renderNav(projects, tasks, proj.name);
+        renderTasks(projects, tasks);
+    }
 }
 
 function newTasks() {

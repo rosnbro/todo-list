@@ -1,4 +1,5 @@
 import renderTasks from './renderTasks';
+import Delete from './delete.svg';
 
 function renderNav(projects, tasks, selection) {
     const projectMenu = document.getElementById('projectMenu');
@@ -6,13 +7,19 @@ function renderNav(projects, tasks, selection) {
 
     projects.forEach(project => {
         let projectSelector = document.createElement('div');
-        
+        let projectName = document.createElement('div');
+        let projectDeleteButton = document.createElement('button');
+
+        let deleteIcon = new Image();
+        deleteIcon.src = Delete;
+
         projectSelector.classList.add('projectSelector');
         projectSelector.style.backgroundColor = project.color;
-        projectSelector.textContent = project.name;
         if (project.name == selection) projectSelector.classList.add('selected');
 
-        projectSelector.addEventListener('click', () => {
+        projectName.textContent = project.name;
+        projectName.classList.add('projectName');
+        projectName.addEventListener('click', () => {
             if (project.name == 'all') {
                 projects.forEach(proj => {
                     proj.selected = true;
@@ -31,6 +38,15 @@ function renderNav(projects, tasks, selection) {
             renderTasks(projects, tasks);
         });
 
+        projectDeleteButton.appendChild(deleteIcon);
+        projectDeleteButton.classList.add('projectDeleteButton');
+        //projectDeleteButton.style.borderColor = project.color;
+        projectDeleteButton.addEventListener('click', () => {
+            project.delete();
+        });
+
+        projectSelector.appendChild(projectName);
+        projectSelector.appendChild(projectDeleteButton);
         projectMenu.appendChild(projectSelector);
     });
     return projectMenu;
