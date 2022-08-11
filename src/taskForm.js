@@ -1,8 +1,6 @@
-function taskForm(parent, projects, taskData) {
-    const inputLeft = document.createElement('fieldset');
-    const inputCenter = document.createElement('fieldset');
-    const inputRight = document.createElement('fieldset');
+import { formatISO } from 'date-fns';
 
+function taskForm(parent, projects, taskData) {
     const progressLabel = document.createElement('label');
     const progressInput = document.createElement('input');
 
@@ -39,14 +37,20 @@ function taskForm(parent, projects, taskData) {
         }
         titleInput.value = taskData.title;
         descriptionInput.value = taskData.description;
-        dueDateInput.value = taskData.dueDate;
+
+        //let year = taskData.dueDate.getUTCFullYear();
+        //let month = taskData.dueDate.getUTCMonth() + 1;
+        //let day = taskData.dueDate.getUTCDate();
+        //if (month.toString().length == 1) month = '0' + month;
+        //if (day.toString().length == 1) day = '0' + day;
+        //let date = year + '-' + month + '-' + day;
+        dueDateInput.value = formatISO(taskData.dueDate, {representation: 'date'});
     } else {
         progressInput.value = 0;
         lowPriority.selected = true;
         titleInput.value = '';
         descriptionInput.value = '';
     }
-
 
     progressInput.type = 'number';
     progressInput.name = 'progress';
@@ -97,6 +101,7 @@ function taskForm(parent, projects, taskData) {
     });
 
     descriptionInput.name = 'description';
+    descriptionInput.rows = 4;
     descriptionLabel.for = descriptionLabel.textContent = 'description';
 
     dueDateInput.required = true;
@@ -107,28 +112,20 @@ function taskForm(parent, projects, taskData) {
     //make current date the default due date
     //alert if selected date is in the past
     
-    inputLeft.id = 'leftInput';
-    inputCenter.id = 'centerInput';
-    inputRight.id = 'rightInput';
-
-    inputLeft.appendChild(progressLabel);
-    inputLeft.appendChild(progressInput);
-    inputLeft.appendChild(priorityLabel);
-    inputLeft.appendChild(priorityInput);
-
-    inputCenter.appendChild(titleLabel);
-    inputCenter.appendChild(titleInput);
-    inputCenter.appendChild(addToProjectLabel);
-    inputCenter.appendChild(addToProject);
-    inputCenter.appendChild(descriptionLabel);
-    inputCenter.appendChild(descriptionInput);
+    grouper(progressLabel, progressInput, 'progressInput');
+    grouper(priorityLabel, priorityInput, 'priorityInput');
+    grouper(titleLabel, titleInput, 'titleInput');
+    grouper(addToProjectLabel, addToProject, 'addToProjectInput');
+    grouper(descriptionLabel, descriptionInput, 'descriptionInput');
+    grouper(dueDateLabel, dueDateInput, 'dueDateInput');
     
-    inputRight.appendChild(dueDateLabel)
-    inputRight.appendChild(dueDateInput);
-    
-    parent.appendChild(inputLeft);
-    parent.appendChild(inputCenter);
-    parent.appendChild(inputRight);
+    function grouper(child1, child2, id) {
+        let p = document.createElement('p');
+        p.classList.add(id);
+        p.appendChild(child1);
+        p.appendChild(child2);
+        parent.appendChild(p);
+    }
 
     return parent;
 }

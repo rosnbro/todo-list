@@ -1,6 +1,7 @@
 import Delete from './delete.svg';
 import Edit from './edit.svg';
 import Check from './check.svg';
+import { intlFormatDistance } from 'date-fns';
 
 function renderPage(projects, tasks) {
     const pageContainer = document.getElementById('taskContainer');
@@ -33,9 +34,11 @@ function renderTasks(wrapper, tasks, projects) {
         let description = document.createElement('div');
         let rightContainer = document.createElement('div');
         let dueDate = document.createElement('div');
+        let dateText = document.createElement('div');
+        let dateNums = document.createElement('div');
         let editButton = document.createElement('button');
         let deleteButton = document.createElement('button');
-        let editTaskForm = document.createElement('div');
+        let editTaskForm = document.createElement('form');
         let projectColor;
 
         let deleteIcon = new Image();
@@ -100,7 +103,20 @@ function renderTasks(wrapper, tasks, projects) {
                         description.textContent = task[prop];
                         break;
                     case 'dueDate':
-                        dueDate.textContent = task[prop];
+                        let today = new Date();
+                        let year = task[prop].getUTCFullYear();
+                        let month = task[prop].getUTCMonth() + 1;
+                        let day = task[prop].getUTCDate();
+                        let date = month + '/' + day + '/' + year;
+                        dateNums.textContent = date;
+
+                        if  (year == today.getUTCFullYear() 
+                            && month == today.getUTCMonth() + 1
+                            && day == today.getUTCDate()) {
+                                dateText.textContent = 'due today';
+                        } else {
+                            dateText.textContent = 'due ' + intlFormatDistance(task[prop], today);
+                        }
                         break;
                 }
             }
@@ -114,6 +130,14 @@ function renderTasks(wrapper, tasks, projects) {
         textContainer.addEventListener('click', () => {
             taskContent.classList.toggle('expanded');
             description.classList.toggle('fullDescription');
+            
+            if (dueDate.childNodes.length > 1) {
+                dueDate.lastChild.remove();
+                dateText.textContent = dateText.textContent.slice(0, -1);
+            } else {
+                dueDate.appendChild(dateNums);
+                dateText.textContent += ',';
+            }
         });
 
         deleteButton.appendChild(deleteIcon);
@@ -131,6 +155,7 @@ function renderTasks(wrapper, tasks, projects) {
         textContainer.appendChild(title);
         textContainer.appendChild(project);
         textContainer.appendChild(description);
+        dueDate.appendChild(dateText);
         rightContainer.appendChild(dueDate);
         rightContainer.appendChild(deleteButton);
         rightContainer.appendChild(editButton);

@@ -9,7 +9,7 @@
     --bg-color-main: darkkhaki;
     --bg-color-task: white;
     --bg-color-progress: darkred;
-    --bg-color-form: grey;
+    --bg-color-form: antiquewhite;
     --color-priority: black;
     --border-color: black;
     --delete-hover-color: red;
@@ -86,7 +86,7 @@ body {
 #projectInput {
     margin: var(--std-spacing-half);
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-family: var(--font-family);
     background-color: var(--bg-color-project);
 }
@@ -122,6 +122,7 @@ main {
 
 #sort {
     grid-area: sort;
+    z-index: 1;
     margin-left: var(--std-spacing);
     margin-top: var(--std-spacing);
     min-height: 110px;
@@ -131,12 +132,52 @@ main {
     border-right-width: 0;
 }
 
+#sortTitle {
+    position: relative;
+    width: 100%;
+    height: 110px;
+    cursor: pointer;
+}
+
+#sortTitle img {
+    position: absolute;
+    top: 35px;
+    left: 35px;
+    height: 40px;
+    margin: 0 auto;
+}
+
+#sortMenu {
+    display: flex;
+    flex-direction: column;
+    width: 165px;
+    height: auto;
+    margin-left: -2px;
+    background-color: var(--bg-color-form);
+    border: solid 4px var(--border-color);
+    border-left-width: 2px;
+}
+
+#sortMenu div {
+    margin: var(--std-spacing);
+    margin-bottom: var(--std-spacing-half);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+#sortMenu button {
+    margin: 0 var(--std-spacing) var(--std-spacing);
+    padding: var(--std-spacing-half);
+    font-size: 1rem;
+    background-color: var(--bg-color-task);
+}
+
 #newTask {
     grid-area: newTask;
     position: sticky;
     position: -webkit-sticky;
-    top: var(--std-spacing);
     z-index: 1;
+    top: var(--std-spacing);
     font-weight: bold;
     background-color: var(--bg-color-form);
     margin-top: var(--std-spacing);
@@ -153,20 +194,16 @@ main {
     padding: 40px var(--std-spacing) 40px calc(3 * var(--std-spacing));
     font-size: 1.5rem;
     background-color: var(--bg-color-task);
-}
-
-label {
-    margin: var(--std-spacing-half) 0;
-    font-size: 1rem;
+    cursor: pointer;
 }
 
 #newTaskForm, 
 .editTaskForm {
     display: grid;
     grid-template-areas: 
-    "leftInput centerInput rightInput"
-    "leftInput centerInput addButton";
-    grid-template-columns: 1fr 50% 1fr;
+    'priorityInput titleInput projectInput dueDateInput'
+    'progressInput descriptionInput descriptionInput addButton';
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     column-gap: var(--std-spacing-double);
     height: fit-content;
     width: 100%;
@@ -182,33 +219,71 @@ label {
     border-left-width: var(--std-spacing-half);
 }
 
-fieldset {
-    border: none;
-}
-
-#leftInput {
-    grid-area: leftInput;
+form p {
     display: flex;
     flex-direction: column;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
-#centerInput {
-    grid-area: centerInput;
-    display: flex;
-    flex-direction: column;
+label {
+    margin-bottom: var(--std-spacing-half);
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
-#rightInput {
-    grid-area: rightInput;
-    display: flex;
-    flex-direction: column;
-}
-
-#addTaskButton {
-    grid-area: addButton;
+input,
+select,
+option {
     font-size: 1rem;
-    margin: var(--std-spacing);
-    padding: var(--std-spacing-half);
+    height: 20px;
+    border-radius: none;
+}
+
+.progressInput {
+    grid-area: progressInput;
+    margin: var(--std-spacing-half) 0 var(--std-spacing) var(--std-spacing);
+}
+
+.priorityInput {
+    grid-area: priorityInput;
+    margin: var(--std-spacing) 0 0 var(--std-spacing);
+}
+
+.titleInput {
+    grid-area: titleInput;
+    margin-top: var(--std-spacing);
+}
+
+.addToProjectInput {
+    grid-area: projectInput;
+    margin-top: var(--std-spacing);
+}
+
+.descriptionInput {
+    grid-area: descriptionInput;
+    margin-top: var(--std-spacing-half);
+    margin-bottom: var(--std-spacing);
+}
+
+textarea {
+    font-size: 1rem;
+}
+
+.dueDateInput {
+    grid-area: dueDateInput;
+    margin: var(--std-spacing) var(--std-spacing) 0 0;
+}
+
+#addTaskButton,
+.editTaskButton {
+    grid-area: addButton;
+    align-self: center;
+    font-size: 1rem;
+    margin: var(--std-spacing-half) var(--std-spacing) var(--std-spacing) 0;
+    width: auto;
+    height: 50px;
+    background-color: var(--bg-color-task);
 }
 
 #taskContainer {
@@ -267,6 +342,7 @@ fieldset {
     font-size: 0.7rem;
     font-weight: bold;
     background-color: var(--bg-color-task);
+    cursor: pointer;
 }
 
 .progressButton img {

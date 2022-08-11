@@ -2,13 +2,18 @@ import render from './render';
 import renderNav from './renderNav';
 import renderTasks from './renderTasks';
 import taskForm from './taskForm';
+import Sort from './sort.svg';
 import './style.css';
 //if using local storage try using object.assign to add object methods
 
+let sortIcon = new Image();
+sortIcon.src = Sort;
+
 let projects = [];
+let projectIndex = 0;
 let tasks = [];
+let taskIndex = 0;
 let projectPalette = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
-let i = 0;
 
 class project {
     constructor(name, selected, color) {
@@ -28,7 +33,8 @@ class project {
                     if (t.project == this.name) {
                         tasks.splice(tasks.indexOf(t), 1);
                     }
-                })
+                });
+                projects.forEach(p => p.selected = true);
                 renderNav(projects, tasks, 'all');
                 renderTasks(projects, tasks);
             }
@@ -36,7 +42,7 @@ class project {
     }
 }
 
-let all = new project('all', true, projectPalette[projects.length]);
+let all = new project('all', true, projectPalette[projectIndex++]);
 projects.push(all);
 
 class task {
@@ -112,10 +118,123 @@ function addProjects(projectInput) {
     }
 }
 
+function sortTasks() {
+    const sortTasks = document.getElementById('sort');
+    const newTask = document.getElementById('newTask');
+    const sortTitle = document.createElement('div');
+    const sortMenu = document.createElement('div');
+    const sortMenuTitle = document.createElement('div');
+    const creationSortButton = document.createElement('button');
+    const progressSortButton = document.createElement('button');
+    const prioritySortButton = document.createElement('button');
+    const titleSortButton = document.createElement('button');
+    const projectSortButton = document.createElement('button');
+    const dueDateSortButton = document.createElement('button');
+
+    sortTitle.id = 'sortTitle';
+    sortMenu.id = 'sortMenu';
+    sortMenuTitle.id = 'sortMenuTitle';
+
+    sortMenuTitle.textContent = 'sort by'
+
+    creationSortButton.textContent = 'creation order';
+    creationSortButton.addEventListener('click', () => {
+        tasks.sort((a, b) => {
+            return a.index - b.index;
+        });
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    progressSortButton.textContent = 'progress';
+    progressSortButton.addEventListener('click', () => {
+        tasks.sort((a, b) => {
+            return a.progress - b.progress || alphabeticalSort(a, b, 'title');
+        });
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    prioritySortButton.textContent = 'priority';
+    prioritySortButton.addEventListener('click', () => {
+        tasks.sort((a, b) => {
+            return prioritySort(a, b) || alphabeticalSort(a, b, 'title');
+        });
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    titleSortButton.textContent = 'title';
+    titleSortButton.addEventListener('click', () => {
+        tasks.sort((a, b) => alphabeticalSort(a, b, 'title'));
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    projectSortButton.textContent = 'project';
+    projectSortButton.addEventListener('click', () => {
+        tasks.sort();
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    dueDateSortButton.textContent = 'due date';
+    dueDateSortButton.addEventListener('click', () => {
+        tasks.sort((a, b) => {
+            return a.dueDate - b.dueDate;
+        });
+        sortTasks.removeChild(sortTasks.lastChild);
+        renderTasks(projects, tasks);
+    });
+
+    function prioritySort(a, b) {
+        if (a.priority == 'low' && b.priority == 'low') return 0;
+        if (a.priority == 'low' && b.priority == 'med') return 1;
+        if (a.priority == 'low' && b.priority == 'high') return 1
+        if (a.priority == 'med' && b.priority == 'low') return -1;
+        if (a.priority == 'med' && b.priority == 'med') return 0;
+        if (a.priority == 'med' && b.priority == 'high') return 1;
+        if (a.priority == 'high' && b.priority == 'low') return -1;
+        if (a.priority == 'high' && b.priority == 'med') return -1;
+        if (a.priority == 'high' && b.priority == 'high') return 0;
+    }
+
+    function alphabeticalSort(a, b, prop) {
+        const titlaA = a[prop].toUpperCase();
+        const titleB = b[prop].toUpperCase();
+        if (titlaA < titleB) return -1;
+        if (titlaA > titleB) return 1;
+        return 0;
+    }
+    
+    sortTitle.addEventListener('click', () => {
+        if (sortTitle.nextSibling) {
+            sortTasks.removeChild(sortTasks.lastChild);
+        } else {
+            sortTasks.appendChild(sortMenu);
+        }
+        if (newTask.firstChild != newTask.lastChild) {
+            newTask.lastChild.innerHTML = '';
+            newTask.removeChild(newTask.lastChild);
+        }
+    });
+
+    sortMenu.appendChild(sortMenuTitle);
+    sortMenu.appendChild(creationSortButton);
+    sortMenu.appendChild(progressSortButton);
+    sortMenu.appendChild(prioritySortButton);
+    sortMenu.appendChild(titleSortButton);
+    sortMenu.appendChild(projectSortButton);
+    sortMenu.appendChild(dueDateSortButton);
+    sortTitle.appendChild(sortIcon);
+    sortTasks.appendChild(sortTitle);
+}
+
 function newTasks() {
     const newTask = document.getElementById('newTask');
+    const sortTasks = document.getElementById('sort');
     const newTaskTitle = document.createElement('div');
-    const newTaskForm = document.createElement('div');
+    const newTaskForm = document.createElement('form');
     
     newTaskTitle.id = 'newTaskTitle';
     newTaskTitle.textContent = '+ new task';
@@ -128,6 +247,9 @@ function newTasks() {
         } else {
             newTask.appendChild(taskForm(newTaskForm, projects));
             addTasks();
+        }
+        if (sortTasks.firstChild != sortTasks.lastChild) {
+            sortTasks.removeChild(sortTasks.lastChild);
         }
     });
     
@@ -174,12 +296,17 @@ function formData(form, taskIndex) {
     formDividers.forEach((divider) => {
         let formItems = divider.childNodes;
         formItems.forEach((item) => {
-            formData[item.name] = item.value;
+            if (item.name == 'dueDate') {
+                let formDueDate = new Date(`${item.value}T00:00:00`);
+                formData[item.name] = formDueDate;
+            } else formData[item.name] = item.value;
         });
     });
-    //Add form validation checking new task against all current tasks to check for duplicates
+    
+    //Add form validation- progress less than 0 and more than 100, character limit for title and description 
+    
     if (form.id == 'newTaskForm') {
-        let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate, i++);
+        let tsk = new task(formData.progress, formData.priority, formData.title, formData.project, formData.description, formData.dueDate, taskIndex++);
         tasks.push(tsk);
 
         projects.forEach(p => {
@@ -219,17 +346,17 @@ function formData(form, taskIndex) {
 }
 
 function defaults() {
-    let proj1 = new project('project 1', true, projectPalette[projects.length]);
+    let proj1 = new project('project 1', true, projectPalette[projectIndex++]);
     projects.push(proj1);
-    let proj2 = new project('project 2', true, projectPalette[projects.length]);
+    let proj2 = new project('project 2', true, projectPalette[projectIndex++]);
     projects.push(proj2);
-    let proj3 = new project('project 3', true, projectPalette[projects.length]);
+    let proj3 = new project('project 3', true, projectPalette[projectIndex++]);
     projects.push(proj3);
     let description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-    let tsk1 = new task(0, 'low', 'task1', 'project 1', description, '2022-07-30', i++);
-    let tsk2 = new task(20, 'low', 'task2', 'project 2', 'test description', '2022-07-30', i++);
-    let tsk3 = new task(60, 'med', 'task3', 'project 3', description, '2022-07-30', i++);
-    let tsk4 = new task(100, 'high', 'task4', 'all', 'test description', '2022-07-30', i++);
+    let tsk1 = new task(0, 'low', 'generic task name', 'project 1', description, new Date('2022-09-21T00:00:00'), taskIndex++);
+    let tsk2 = new task(20, 'low', 'ayy lmao', 'project 2', description, new Date('2022-08-20T00:00:00'), taskIndex++);
+    let tsk3 = new task(60, 'med', 'yo yo yo', 'project 3', description, new Date('2022-08-12T00:00:00'), taskIndex++);
+    let tsk4 = new task(100, 'high', 'boiiiii', 'all', description, new Date('2022-08-11T00:00:00'), taskIndex++);
 
     tasks.push(tsk1);
     tasks.push(tsk2);
@@ -242,6 +369,7 @@ render();
 document.addEventListener('DOMContentLoaded', () => {
     newProjects();
     newTasks();
+    sortTasks();
 });
 renderNav(projects, tasks, 'all');
 renderTasks(projects, tasks);
