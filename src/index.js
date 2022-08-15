@@ -3,6 +3,7 @@ import renderNav from './renderNav';
 import renderTasks from './renderTasks';
 import taskForm from './taskForm';
 import Sort from './sort.svg';
+import Chevron from './chevron.svg';
 import { isValid } from 'date-fns';
 import './style.css';
 //if using local storage try using object.assign to add object methods
@@ -11,10 +12,12 @@ let projects = [];
 let projectIndex = 0;
 let tasks = [];
 let taskIndex = 0;
-let projectPalette = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+let projectPalette = ['#F76C5E', '#F68E5F', '#F5DD90', '#E8FFB7', '#48E5C2', '#50C5B7', /*'#69DDFF',*/ '#6495ED', '#D4C1EC', '#EC91D8', '#D66BA0'];
 var sortCriteria = 'dueDate';
 let sortIcon = new Image();
 sortIcon.src = Sort;
+let arrowIcon = new Image();
+arrowIcon.src = Chevron;
 
 class project {
     constructor(name, selected, color) {
@@ -88,10 +91,10 @@ function newProjects() {
         }
     });
 
-    projectInputButton.textContent = '>';
     projectInputButton.id = 'projectInputButton';
     projectInputButton.addEventListener('click', () => addProjects(projectInput));
 
+    projectInputButton.appendChild(arrowIcon);
     newProject.appendChild(projectInput);
     newProject.appendChild(projectInputButton);
 }
@@ -318,21 +321,27 @@ function formData(form, taskIndex) {
 }
 
 function defaults() {
-    let proj1 = new project('project 1', true, projectPalette[projectIndex++]);
-    let proj2 = new project('project 2', true, projectPalette[projectIndex++]);
-    let proj3 = new project('project 3', true, projectPalette[projectIndex++]);
+    let proj1 = new project('chores', true, projectPalette[projectIndex++]);
+    let proj2 = new project('odin project', true, projectPalette[projectIndex++]);
+    let proj3 = new project('hobbies', true, projectPalette[projectIndex++]);
     projects.push(proj1);
     projects.push(proj2);
     projects.push(proj3);
     let description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-    let tsk1 = new task(0, 'low', 'generic task name', 'project 1', description, new Date('2022-09-21T00:00:00'), taskIndex++);
-    let tsk2 = new task(20, 'low', 'ayy lmao', 'project 2', description, new Date('2022-08-20T00:00:00'), taskIndex++);
-    let tsk3 = new task(60, 'med', 'yo yo yo', 'project 3', description, new Date('2022-08-12T00:00:00'), taskIndex++);
-    let tsk4 = new task(100, 'high', 'boiiiii', 'all', description, new Date('2022-08-11T00:00:00'), taskIndex++);
+    let tsk1 = new task(0, 'low', 'vacuum living room', 'chores', description, new Date('2022-09-21T00:00:00'), taskIndex++);
+    let tsk2 = new task(20, 'low', 'make bed', 'chores', description, new Date('2022-08-20T00:00:00'), taskIndex++);
+    let tsk3 = new task(60, 'med', 'learn new piano piece', 'hobbies', description, new Date('2022-10-04T00:00:00'), taskIndex++);
+    let tsk4 = new task(0, 'high', 'set reminder to remember to stop setting vague reminders', 'all', description, new Date('2022-09-16T00:00:00'), taskIndex++);
+    let tsk5 = new task(100, 'high', 'boiiiii', 'all', description, new Date('2022-06-09T00:00:00'), taskIndex++);
+    let tsk6 = new task(100, 'high', 'foundations', 'odin project', description, new Date('2022-06-11T00:00:00'), taskIndex++);
+    let tsk7 = new task(33, 'high', 'full stack js', 'odin project', description, new Date('2022-12-25T00:00:00'), taskIndex++);
     tasks.push(tsk1);
     tasks.push(tsk2);
     tasks.push(tsk3);
     tasks.push(tsk4);
+    tasks.push(tsk5);
+    tasks.push(tsk6);
+    tasks.push(tsk7);
 }
 
 defaults();

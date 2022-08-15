@@ -154,8 +154,12 @@ function renderTasks(wrapper, tasks, projects) {
                         dateNums.textContent = date;
 
                         if (isPast(task[prop])) {
-                            dateText.style.color = 'red';
-                            dateNums.style.color = 'red';
+                            if (task.progress == 100) {
+
+                            } else {
+                                dateText.style.color = 'red';
+                                dateNums.style.color = 'red';
+                            }
                         };
 
                         if  (year == today.getUTCFullYear() 
@@ -180,6 +184,8 @@ function renderTasks(wrapper, tasks, projects) {
 
         function expand() {
             taskContent.classList.toggle('expanded');
+            title.classList.toggle('fullDescription');
+            project.classList.toggle('fullDescription');
             description.classList.toggle('fullDescription');
             
             if (dueDate.childNodes.length > 1) {
