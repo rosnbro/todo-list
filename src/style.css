@@ -106,25 +106,31 @@ body {
 
 main {
     grid-area: main;
-    display: grid;
-    grid-template-areas: 
-    'sort newTask'
-    'container container';
-    grid-template-columns: calc(110px + var(--std-spacing) + 2px) 1fr;
-    grid-template-rows: calc(110px + var(--std-spacing) + 6px) 1fr;
-    column-gap: 0;
-    row-gap: var(--std-spacing);
+    display: flex;
+    flex-direction: column;
     height: auto;
     width: 100%;
     overflow: scroll;
     background-color: var(--bg-color-main);
 }
 
+header {
+    height: auto;
+    margin: var(--std-spacing);
+    margin-right: var(--std-spacing-double);
+    display: grid;
+    grid-template-areas: 
+    'sort newTask'
+    'child child';
+    grid-template-columns: 112px 1fr;
+    /*grid-template-rows: calc(110px + var(--std-spacing) + 6px) 1fr;*/
+    column-gap: 0;
+    row-gap: 0;
+}
+
 #sort {
     grid-area: sort;
     z-index: 1;
-    margin-left: var(--std-spacing);
-    margin-top: var(--std-spacing);
     min-height: 110px;
     background-color: var(--bg-color-task);
     border: solid 2px var(--border-color);
@@ -148,25 +154,26 @@ main {
 }
 
 #sortMenu {
-    display: flex;
-    flex-direction: column;
-    width: 165px;
+    grid-area: child;
+    display: grid;
+    grid-template-columns: 112px 1fr 1fr 1fr 1fr 1fr 1fr;
     height: auto;
-    margin-left: -2px;
     background-color: var(--bg-color-form);
     border: solid 4px var(--border-color);
     border-left-width: 2px;
+    border-top-width: 0;
 }
 
 #sortMenu div {
     margin: var(--std-spacing);
-    margin-bottom: var(--std-spacing-half);
+    padding-top: 8px;
     font-size: 1.2rem;
     font-weight: bold;
+    text-align: center;
 }
 
 #sortMenu button {
-    margin: 0 var(--std-spacing) var(--std-spacing);
+    margin: var(--std-spacing);
     padding: var(--std-spacing-half);
     font-size: 1rem;
     background-color: var(--bg-color-task);
@@ -174,15 +181,9 @@ main {
 
 #newTask {
     grid-area: newTask;
-    position: sticky;
-    position: -webkit-sticky;
-    z-index: 1;
-    top: var(--std-spacing);
     font-weight: bold;
     background-color: var(--bg-color-form);
-    margin-top: var(--std-spacing);
     min-height: calc(110px - 6px - 2 * var(--std-spacing));
-    margin-right: var(--std-spacing-double);
     border: solid 2px var(--border-color);
     border-bottom-width: 4px;
     border-right-width: 4px;
@@ -199,6 +200,7 @@ main {
 
 #newTaskForm, 
 .editTaskForm {
+    grid-area: child;
     display: grid;
     grid-template-areas: 
     'priorityInput titleInput projectInput dueDateInput'
@@ -214,8 +216,8 @@ main {
 #newTaskForm {
     margin-left: -8px;
     border: solid 2px var(--border-color);
-    border-bottom-width: 4px;
-    border-right-width: 4px;
+    border-bottom-width: 0px;
+    border-top-width: 4px;
     border-left-width: var(--std-spacing-half);
 }
 
@@ -232,10 +234,16 @@ label {
     font-weight: bold;
 }
 
+button {
+    font-family: var(--font-family);
+    cursor: pointer;
+}
+
 input,
 select,
 option {
     font-size: 1rem;
+    font-family: var(--font-family);
     height: 20px;
     border-radius: none;
 }
@@ -291,12 +299,11 @@ textarea {
     display: flex;
     flex-direction: column;
     margin-left: var(--std-spacing);
-    margin-right: calc(6px + var(--std-spacing-double));
+    margin-right: var(--std-spacing-double);
 }
 
 .task {
     margin-bottom: var(--std-spacing);
-    width: 100%;
     border: solid 2px var(--border-color);
     border-right-width: 4px;
     background-color: var(--bg-color-task);
@@ -342,7 +349,6 @@ textarea {
     font-size: 0.7rem;
     font-weight: bold;
     background-color: var(--bg-color-task);
-    cursor: pointer;
 }
 
 .progressButton img {
@@ -377,7 +383,7 @@ textarea {
     flex-direction: column;
     margin-left: calc(110px + 3.5 * var(--std-spacing));
     padding: var(--std-spacing);
-    width: calc(100% - 260px - 5.5 * var(--std-spacing));
+    width: calc(100% - 310px - 5.5 * var(--std-spacing));
     cursor: pointer;
 }
 
@@ -408,14 +414,15 @@ textarea {
     position: absolute;
     right: 0;
     height: 100%;
-    width: 150px;
+    width: 200px;
     display: grid;
-    column-gap: var(--std-spacing);
+    column-gap: var(--std-spacing-half);
     grid-template-areas: 
     "dueDate delete"
     "dueDate edit";
     grid-template-rows: 50% 50%;
     grid-template-columns: 1fr 55px;
+    cursor: pointer;
 }
 
 .dueDate {

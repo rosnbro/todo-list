@@ -37,13 +37,6 @@ function taskForm(parent, projects, taskData) {
         }
         titleInput.value = taskData.title;
         descriptionInput.value = taskData.description;
-
-        //let year = taskData.dueDate.getUTCFullYear();
-        //let month = taskData.dueDate.getUTCMonth() + 1;
-        //let day = taskData.dueDate.getUTCDate();
-        //if (month.toString().length == 1) month = '0' + month;
-        //if (day.toString().length == 1) day = '0' + day;
-        //let date = year + '-' + month + '-' + day;
         dueDateInput.value = formatISO(taskData.dueDate, {representation: 'date'});
     } else {
         progressInput.value = 0;
@@ -57,7 +50,7 @@ function taskForm(parent, projects, taskData) {
     progressInput.min = 0;
     progressInput.max = 100;
     progressLabel.for = 'progress';
-    progressLabel.textContent = 'progress';
+    progressLabel.textContent = 'progress (%)';
 
     priorityInput.required = true;
     priorityInput.name = 'priority';
@@ -72,6 +65,7 @@ function taskForm(parent, projects, taskData) {
 
     titleInput.required = true;
     titleInput.type = 'text';
+    titleInput.maxLength = 50;
     titleInput.name = 'title';
     titleLabel.for = 'title';
     titleLabel.textContent = 'title*';
@@ -102,6 +96,7 @@ function taskForm(parent, projects, taskData) {
 
     descriptionInput.name = 'description';
     descriptionInput.rows = 4;
+    descriptionInput.maxLength = 300;
     descriptionLabel.for = descriptionLabel.textContent = 'description';
 
     dueDateInput.required = true;
@@ -109,8 +104,6 @@ function taskForm(parent, projects, taskData) {
     dueDateInput.name = 'dueDate';
     dueDateLabel.for = 'dueDate';
     dueDateLabel.textContent = 'due date*';
-    //make current date the default due date
-    //alert if selected date is in the past
     
     grouper(progressLabel, progressInput, 'progressInput');
     grouper(priorityLabel, priorityInput, 'priorityInput');

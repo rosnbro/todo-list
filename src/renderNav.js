@@ -1,7 +1,7 @@
 import renderTasks from './renderTasks';
 import Delete from './delete.svg';
 
-function renderNav(projects, tasks, selection) {
+function renderNav(projects, tasks, selection, sortCriteria) {
     const projectMenu = document.getElementById('projectMenu');
     projectMenu.innerHTML = '';
 
@@ -34,13 +34,11 @@ function renderNav(projects, tasks, selection) {
             let navs = projectMenu.childNodes;
             navs.forEach(nav => nav.classList.remove('selected'));
             projectSelector.classList.add('selected');
-
-            renderTasks(projects, tasks);
+            renderTasks(projects, tasks, sortCriteria);
         });
 
         projectDeleteButton.appendChild(deleteIcon);
         projectDeleteButton.classList.add('projectDeleteButton');
-        //projectDeleteButton.style.borderColor = project.color;
         projectDeleteButton.addEventListener('click', () => {
             project.delete();
         });

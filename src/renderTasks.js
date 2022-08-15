@@ -1,13 +1,56 @@
 import Delete from './delete.svg';
 import Edit from './edit.svg';
 import Check from './check.svg';
-import { intlFormatDistance } from 'date-fns';
+import { intlFormatDistance, isPast } from 'date-fns';
 
-function renderPage(projects, tasks) {
+function renderPage(projects, tasks, sortCriteria) {
     const pageContainer = document.getElementById('taskContainer');
     pageContainer.innerHTML = '';
+    tasks.sort((a, b) => sorter(a, b, sortCriteria));
     renderTasks(pageContainer, filterTasks(projects, tasks), projects);
     return pageContainer;
+}
+
+function sorter(a, b, sortCriteria) {
+    switch (sortCriteria) {
+        case 'creationOrder':
+            return a.index - b.index;
+
+        case 'priority':
+            return priorityLogic(a, b);
+
+        case 'progress':
+            return b.progress - a.progress;
+
+        case 'project':
+            return alphabeticalLogic(a, b, 'project');
+
+        case 'title':
+            return alphabeticalLogic(a, b, 'title');
+    
+        default: 'dueDate'
+            return a.dueDate - b.dueDate;
+    } 
+
+    function alphabeticalLogic(a, b, prop) {
+        const titlaA = a[prop].toUpperCase();
+        const titleB = b[prop].toUpperCase();
+        if (titlaA < titleB) return -1;
+        if (titlaA > titleB) return 1;
+        return 0;
+    }
+
+    function priorityLogic(a, b) {
+        if (a.priority == 'low' && b.priority == 'low') return 0;
+        if (a.priority == 'low' && b.priority == 'med') return 1;
+        if (a.priority == 'low' && b.priority == 'high') return 1
+        if (a.priority == 'med' && b.priority == 'low') return -1;
+        if (a.priority == 'med' && b.priority == 'med') return 0;
+        if (a.priority == 'med' && b.priority == 'high') return 1;
+        if (a.priority == 'high' && b.priority == 'low') return -1;
+        if (a.priority == 'high' && b.priority == 'med') return -1;
+        if (a.priority == 'high' && b.priority == 'high') return 0;
+    }
 }
 
 function filterTasks(projects, tasks) {
@@ -110,6 +153,11 @@ function renderTasks(wrapper, tasks, projects) {
                         let date = month + '/' + day + '/' + year;
                         dateNums.textContent = date;
 
+                        if (isPast(task[prop])) {
+                            dateText.style.color = 'red';
+                            dateNums.style.color = 'red';
+                        };
+
                         if  (year == today.getUTCFullYear() 
                             && month == today.getUTCMonth() + 1
                             && day == today.getUTCDate()) {
@@ -127,7 +175,10 @@ function renderTasks(wrapper, tasks, projects) {
         progressButton.style.borderColor = projectColor;
         progressButton.addEventListener('click', () => task.complete());
 
-        textContainer.addEventListener('click', () => {
+        textContainer.addEventListener('click', () => expand());
+        rightContainer.addEventListener('click', () => expand());
+
+        function expand() {
             taskContent.classList.toggle('expanded');
             description.classList.toggle('fullDescription');
             
@@ -138,7 +189,7 @@ function renderTasks(wrapper, tasks, projects) {
                 dueDate.appendChild(dateNums);
                 dateText.textContent += ',';
             }
-        });
+        }
 
         deleteButton.appendChild(deleteIcon);
         deleteButton.addEventListener('click', () => task.delete());
